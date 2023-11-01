@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Booking;
+use App\Models\Vehicle;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DetailBooking extends Model
 {
@@ -19,4 +21,11 @@ class DetailBooking extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function booking(){
+        return $this->belongsTo(Booking::class,'booking_id');
+    }
+    public function vehicle(){
+        return $this->belongsTo(Vehicle::class,'vehicle_id');
+    }
 }
