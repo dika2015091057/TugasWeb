@@ -16,6 +16,7 @@ return new class extends Migration
             $table->bigInteger('vehicle_id')->unsigned();
             $table->bigInteger('booking_id')->unsigned();
             $table->bigInteger('qty');
+            $table->double('price_total_charter',12 ,2)->default(0);
             $table->timestamp('pickup_date')->nullable();
             $table->timestamp('return_date')->nullable();
             $table->timestamps();
