@@ -17,11 +17,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('username')->unique();
             $table->string('password');
-            $table->text('address');
-            $table->string('photo_profile');
-            $table->string('phone_number');
-            $table->softDeletes();
+            $table->text('address')->nullable();
+            $table->string('photo_profile')->nullable();
+            $table->string('phone_number')->nullable();
             $table->timestamps();
+            $table->softDeletes();
             $table->foreign('role_id')->references('role_id')->on('roles');
         });
 
