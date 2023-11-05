@@ -27,15 +27,21 @@ Route::group(['middleware'=>'guest'],function (){
     Route::get('/', function () {
         return view('guest.landingPage');
     });
-
+    
 });
 Route::group(['middleware'=>'auth:user'],function (){
     Route::get('/home', function(){
         return view('user.dashboard');
     });
+    Route::delete('/logoutuser', [AuthController::class, 'logout'])->name('logoutuser');
+  
 });
+
+
+
 Route::middleware(['auth:admin'])->group(function () {
     // Rute-rute admin di sini
     Route::get('/dashboardAdmin', [DashboardAdminController::class, 'showdashboard'])->name('showDashboardAdmin');
+    Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 

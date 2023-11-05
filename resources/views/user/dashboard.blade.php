@@ -21,6 +21,11 @@
         <li><a href="#">Manage Kendaraan</a></li>
         <li><a href="#">Profile</a></li>
     </ul>
+    <form action="{{ route('logoutuser') }}" method="POST" class="d-flex" role="search">
+        @csrf
+        @method('DELETE')
+        <button class="btn btn-danger" type="submit">Logout</button>
+    </form>
 </div>
 @endsection
 
