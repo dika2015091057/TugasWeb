@@ -18,7 +18,7 @@ return new class extends Migration
             $table->bigInteger('stock');
             $table->string('type');
             $table->double('charter_price', 12, 2);
-            $table->string('status');
+            $table->string('status')->nullable();
             $table->text('description');
             $table->timestamps();
             $table->softDeletes();
