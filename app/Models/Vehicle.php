@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Admin;
+use App\Models\DetailBooking;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Vehicle extends Model
 {
@@ -19,5 +21,13 @@ protected $fillable =[
     'created_at',      
     'updated_at',
 ];
+
+public function admin(){
+    return  $this->belongsTo(Admin::class,'admin_id');
+}
+
+public function detail(){
+    return $this->hasMany(DetailBooking::class,'vehicle_id');
+}
 
 }
