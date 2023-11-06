@@ -12,15 +12,15 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    // TODO View Register Page
     public function register()
     {
         return view('register');
     }
 
+    // TODO User Register 
     public function registerPost(Request $request)
     {
-
-
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
@@ -35,11 +35,14 @@ class AuthController extends Controller
         return redirect('/home');
     }
 
+
+    // TODO View Login Page
     public function login()
     {
         return view('login');
     }
 
+    // TODO User Login
     public function loginPost(Request $request)
     {
         $credentials = [
@@ -65,6 +68,7 @@ class AuthController extends Controller
     }
 
 
+    //TODO User Or Admin Logout
     public function logout(){
         Auth::logout();
         return redirect('/login');
