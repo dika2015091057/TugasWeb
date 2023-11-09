@@ -2,85 +2,98 @@
 
 namespace App\Http\Controllers\User;
 
-use Illuminate\Support\Carbon;
 use App\Models\Admin;
 use App\Models\Booking;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use App\Models\DetailBooking;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
     //TODO View All Vehicles
     public function viewvehicles()
     {
-        $vehicle = vehicle::get();
-        return $vehicle;
+        $vehicles = vehicle::paginate(6);
+        return view('user.home',compact('vehicles'));
+        
     }
-    public function viewVehicleWithId(Request $request)
+
+//TODO DETAIL Vehicle
+    public function viewVehicleWithId($id)
     {
-        $id = $request->input('vehicle_id');
-        dd($id);
-        $vehicle = vehicle::where('vehicle_id', $id)->get();
-        return $vehicle;
+        //$id = $request->input('id');
+        //dd($id);
+        // $data = vehicle::where('vehicle_id', $id)->first();
+        
+        // $admin = Admin::where('admin_id',$data->admin_id)->first();
+        // //dd($admin);
+        $vehicle=Vehicle::with('Admin')
+        ->where('vehicle_id',$id)
+        ->first();
+// $vehicle=[
+// 'vehicle_id'=>$data->vehicle_id,
+// 'name'=>$data->name,
+// 'vehicle_photo'=>$data->vehicle_photo,
+// 'username'=>$admin->username,
+// 'stock'=>$data->stock,
+// 'charter_price'=>$data->charter_price
+// ];       
+//dd($vehicle);
+        return view('user.detailVehicle',compact('vehicle'));
+
+
     }
 
-    //TODO USER Create Booking
-    public function createBooking(Request $request)
-    {
-        // get data from request
-        $userId = $request->input('user_id');
-        $status = "proses";
-        $vehicleId = $request->input('vehicle_id');
-        $qty = $request->input('qty');        
-        $total = $request->input('total');        
-        $pickup = $request->input('pickup_date');        
-        $return = $request->input('return_date');        
-        
-
-// Mengonversi tanggal ke format timestamp
-
-// $dateString = '13/02/2022';
-// dd($pickup,$dateString);
-// Mengonversi tanggal ke format Carbon yang dapat diuraikan
-// $carbonDate = Carbon::createFromFormat('d/m/Y', $pickup);
-
-        // // Membuat objek Booking dan menyimpannya ke database
-        // create booking database
-        $booking = new Booking();
-        $booking->booking_id;
-        $booking->user_id = $userId;
-        $booking->status = $status;
-        $booking->save();
-
-        // Mengambil ID booking yang baru ditambahkan
-        $newBookingId = $booking->id;
-        // $newBookingId = DB::table('bookings')->insertGetId([
-        //     'user_id' => $userId,
-        //     'status' => $status,
-        //     'created_at' =>now()
-        // ]);
-        
-        //create detail booking with a before created booking
-        $detail = new DetailBooking();
-        $detail->booking_id=$newBookingId;
-        $detail->vehicle_id=$vehicleId;
-        $detail->qty=$qty;
-        $detail->price_total_charter=$total;
-        $detail->pickup_date=$pickup;
-        $detail->return_date=$return;
-        $detail->save();
-        
-return ($detail);
-       //return response()->json(['message' => 'Booking created', 'booking_id' => $newBookingId], 201);
-    }
 
 
     //TODO Update Booking
 public function updateBooking(){
-
 }
 
+
+//TODO SEARCH
+public function search(Request $request){
+
+    $search=$request->input('search');
+   
+    $vehicles = Vehicle::where('name', 'like', '%' . $search . '%')
+    ->paginate(6);
+
+// You should replace 'column_name' with the actual column you want to search in.
+
+return view('user.home', compact('vehicles'));
+}
+public function type(Request $request){
+
+    $type=$request->input('type');
+   
+    $vehicles = Vehicle::where('type', 'like',$type)
+    ->paginate(6);
+
+// You should replace 'column_name' with the actual column you want to search in.
+
+return view('user.home', compact('vehicles'));
+}
+public function ticket(Request $request){
+    //dd($request->detail_id);
+    $id=$request->booking_id;
+
+    // $detail= DetailBooking::where('detail_booking_id',$id)->first();
+    // $booking= Booking::where('booking_id',121)->first();
+    $ticket = DetailBooking::with('Vehicle')
+    ->where('booking_id', $id)
+    ->get();
+   // dd($ticket);
+return view('user.ticket', compact('ticket'));
+
+// Menyimpan data $ticket ke dalam session
+
+    
+    //return view('user.ticket',compact('detail'));
+}
 }

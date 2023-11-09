@@ -1,9 +1,12 @@
 <?php
 
+use App\Models\Booking;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Guest\GuestController;
+use App\Http\Controllers\User\BookingController;
+use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\Admin\DashboardAdminController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -24,8 +27,6 @@ Route::group(['middleware'=>'guest'],function (){
     Route::post('register', [AuthController::class, 'registerPost'])->name('register');
     Route::get('/login',[AuthController::class,'login'])->name('login');
     Route::post('/login', [AuthController::class, 'loginPost'])->name('login');
-    Route::get('/viewvehicles', [UserController::class, 'viewvehicles'])->name('viewvehicles');
-    Route::post('/back/viewvehiclewithid', [UserController::class, 'viewVehicleWithId'])->name('viewVehicleWithId');
     Route::post('/back/createbooking', [UserController::class, 'createBooking'])->name('createBooking');
     Route::get('/', [GuestController::class, 'index'])->name('index');
 });
@@ -34,10 +35,18 @@ Route::group(['middleware'=>'guest'],function (){
 
 // ROUTE FOR USER
 Route::group(['middleware'=>'auth:user'],function (){
-    Route::get('/home', function(){return view('user.dashboard');});
+    Route::get('/detail{id}', [UserController::class, 'viewVehicleWithId'])->name('detail');
+    //Route::get('/home', function(){return view('user.dashboard');});
+    Route::get('/home', [UserController::class, 'viewvehicles'])->name('viewvehicles');
     Route::delete('/logoutuser', [AuthController::class, 'logout'])->name('logoutuser');
+    Route::get('/search', [UserController::class, 'search'])->name('search');
+    Route::get('/type', [UserController::class, 'type'])->name('type');
+    Route::post('/createbooking', [BookingController::class, 'createBooking'])->name('createBooking');
+    Route::get('/ticket{booking_id}', [UserController::class, 'ticket'])->name('ticket');
+    Route::get('/bookings', [BookingController::class, 'bookings'])->name('bookings');
+    Route::get('/profile', [ProfileController::class, 'view'])->name('view');
 });
-
+Route::get('/e', [UserController::class, 'viewvehicles'])->name('viewvehicles');
 // ROUTE FOR ADMIN
 Route::middleware(['auth:admin'])->group(function () {
     Route::get('/dashboardAdmin', [DashboardAdminController::class, 'showdashboard'])->name('showDashboardAdmin');

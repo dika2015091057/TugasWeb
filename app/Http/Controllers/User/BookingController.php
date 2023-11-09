@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\User;
 
 
+use App\Models\Update;
 use App\Models\Booking;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use App\Models\DetailBooking;
-use App\Http\Controllers\Controller;
-use App\Models\Update;
 use App\Models\UpdateBooking;
-use App\Models\Vehicle;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use PHPUnit\Framework\Attributes\Ticket;
 
 class BookingController extends Controller
@@ -59,15 +61,18 @@ class BookingController extends Controller
                             $detail->save();
 
                             $count = $totalprice + ($detail->price_total_charter);
-                            $update = UpdateBooking::where('booking_id', $booking_id)->first();
+                            $update = Booking::where('booking_id', $booking_id)->first();
                             //dd($newBookingId);
                             // $update->price_total_booking=$count;
                             $update->update(['price_total_booking' => $count]);
                             // ];
-                            $ticket = [
-                                'detail_id' => $detail->id,
-                            ];
-                            return redirect()->route('ticket', $ticket);
+
+                            // $ticket =DetailBooking::where('booking_id',$booking_id)->get();
+                            // //return redirect()->route('ticket', $ticket);
+
+
+                            // Melakukan redirect ke route baru
+                            return redirect()->route('ticket',$booking_id);
                         }
                     }
                 }
@@ -90,7 +95,8 @@ class BookingController extends Controller
         $booking->save();
 
         // Mengambil ID booking yang baru ditambahkan
-        $newBookingId = $booking->id;
+        $newBookingId = $booking->booking_id;
+        //dd($newBookingId);
         //create detail booking with a before created booking
         $detail = new DetailBooking();
         $detail->booking_id = $newBookingId;
@@ -103,10 +109,10 @@ class BookingController extends Controller
 
 
         $countprice = ($booking->price_total_booking) + ($detail->price_total_charter);
-        $update = UpdateBooking::where('booking_id', $newBookingId)->first();
+        $update = Booking::where('booking_id', $newBookingId)->first();
         $update->update(['price_total_booking' => $countprice]);
         $ticket = [
-            'detail_id' => $detail->id,
+            'booking_id' => $newBookingId,
         ];
         return redirect()->route('ticket', $ticket);
         //return response()->json(['message' => 'Booking created', 'booking_id' => $newBookingId], 201);
@@ -114,6 +120,44 @@ class BookingController extends Controller
 
 
 
+    //TODO Booking Details
+    public function bookings()
+    {
+        $userId = Auth::user()->user_id;
+
+        // $booking = Booking::with('detail')->where('user_id', $userId)->get();
+
+        // $details = DB::table('detail_bookings')
+        // ->leftJoin('bookings', 'detail_bookings.booking_id', '=', 'bookings.booking_id')
+        // ->where('bookings.user_id',$userId)
+        // ->groupBy('detail_bookings.booking_id')
+        // ->get();
+        // $booking = Booking::select('bookings.*', 'admins.username as admin_name', 'admins.admin_id')
+        // ->leftJoin('detail_bookings', 'bookings.booking_id', '=', 'detail_bookings.booking_id')
+        // ->leftJoin('vehicles', 'detail_bookings.vehicle_id', '=', 'vehicles.vehicle_id')
+        // ->leftJoin('admins', 'vehicles.admin_id', '=', 'admins.admin_id')
+        // ->where('bookings.user_id', $userId)
+        // ->groupBy('bookings.booking_id') 
+        // ->get();
+
+        $booking = Booking::select('bookings.booking_id', 'bookings.price_total_booking', 'bookings.status', DB::raw('MAX(admins.username) AS admin_name'), DB::raw('MAX(admins.photo_profile) AS admin_photo'), DB::raw('MAX(admins.admin_id) AS admin_id'))
+            ->leftJoin('detail_bookings', 'bookings.booking_id', '=', 'detail_bookings.booking_id')
+            ->leftJoin('vehicles', 'detail_bookings.vehicle_id', '=', 'vehicles.vehicle_id')
+            ->leftJoin('admins', 'vehicles.admin_id', '=', 'admins.admin_id')
+            ->where('bookings.user_id', $userId)
+            ->groupBy('bookings.booking_id', 'bookings.price_total_booking', 'bookings.status')
+            ->get();
+
+        // foreach ($booking as $bookings) {
+        //     //echo "Booking ID: " . $booking->booking_id . "\n";
+        //     echo "Admin Name: " . $booking->admin_name . "\n";
+        //     // tambahkan informasi lain yang ingin Anda tampilkan
+        //     echo "\n";
+        // }
+
+        //dd($booking);
+        return view('user.booking', compact('booking'));
+    }
 
     /**
      * Show the form for creating a new resource.

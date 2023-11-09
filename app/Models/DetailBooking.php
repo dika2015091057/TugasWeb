@@ -11,6 +11,7 @@ class DetailBooking extends Model
 {
     use HasFactory;
     protected $table = 'detail_bookings';
+    protected $primaryKey = 'detail_booking_id';
     protected $fillable =[
         'booking_id',
         'vehicle_id',
