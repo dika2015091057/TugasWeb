@@ -15,31 +15,26 @@
         <div class="container d-flex flex-column gap-5">
             <div class="container-card d-flex flex-wrap gap-2 justify-content-center">
                 @foreach ($vehicles as $vehicle)
-                    <div class="card d-flex flex-column gap-2 col-3 px-1 py-1">
+                    <div class="col-3">
+                        @csrf
                         <form method="GET" action="{{ route('detail', ['id' => $vehicle->vehicle_id]) }}">
-                            @csrf
-                            <button type="submit" class="image-container d-flex p-0 border-0 ">
-                                <img src="{{ $vehicle->vehicle_photo }}" alt="Vehicle" class="img-fluid rounded ">
-                            </button>
+                            <div class="card shadow-sm">
+                                <button type="submit" class="border-0">
+                                    <img class=" " width="100%" height="225" src="{{ $vehicle->vehicle_photo }}">
+                                </button>
+                                <div class="card-body">
+                                    <p class="card-text text-center">{{ $vehicle->name }}</p>
+                                    <p class="card-text text-center">{{ $vehicle->charter_price }}\Hari</p>
+
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="text-body-secondary col d-flex justify-content-end">stok: {{ $vehicle->stock }}
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </form>
-                        <div class="footer">
-                            <h3><span style="font-weight: bold;">Marque :</span> {{ $vehicle->name }}</h3>
-                            <p><span style="font-weight: bold;">Marque :</span> {{ $vehicle->charter_price }}/Hari</p>
-                           
-                        </div>
                     </div>
-                    {{-- <div class="card col-lg-3 col-md-4 col-sm-6 col-12 px-1 py-1 " style="height: 400px;">
-                        <form method="GET" action="{{ route('detail', ['id' => $vehicle->vehicle_id]) }}">
-                            @csrf
-                            <button type="submit" class="image-container d-flex py-0 border border-0 " style="height: 100px;">
-                                <img src="{{ $vehicle->vehicle_photo }}" alt="Vehicle" class="img-fluid rounded" style="object-fit: cover; width: 300px; height:100% ;">
-                            </button>
-                        </form>
-                        <div class="footer">
-                            <h3><span style="font-weight: bold;">Marque :</span> {{ $vehicle->name }}</h3>
-                        </div>
-                    </div> --}}
-                    
                 @endforeach
             </div>
         </div>

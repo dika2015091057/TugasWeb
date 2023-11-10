@@ -45,8 +45,8 @@ Route::group(['middleware'=>'auth:user'],function (){
     Route::get('/ticket{booking_id}', [UserController::class, 'ticket'])->name('ticket');
     Route::get('/bookings', [BookingController::class, 'bookings'])->name('bookings');
     Route::get('/profile', [ProfileController::class, 'view'])->name('view');
+    Route::post('/updateprofile', [ProfileController::class, 'updateProfile'])->name('updateProfile');
 });
-Route::get('/e', [UserController::class, 'viewvehicles'])->name('viewvehicles');
 // ROUTE FOR ADMIN
 Route::middleware(['auth:admin'])->group(function () {
     Route::get('/dashboardAdmin', [DashboardAdminController::class, 'showdashboard'])->name('showDashboardAdmin');

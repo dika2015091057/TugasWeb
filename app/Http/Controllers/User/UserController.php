@@ -61,7 +61,7 @@ public function search(Request $request){
 
     $search=$request->input('search');
    
-    $vehicles = Vehicle::where('name', 'like', '%' . $search . '%')
+    $vehicles = Vehicle::where('name', 'like', '%' . $search . '%')->orderby('name')
     ->paginate(6);
 
 // You should replace 'column_name' with the actual column you want to search in.
@@ -85,15 +85,13 @@ public function ticket(Request $request){
 
     // $detail= DetailBooking::where('detail_booking_id',$id)->first();
     // $booking= Booking::where('booking_id',121)->first();
+    $booking=Booking::where('booking_id',$id)->first();
     $ticket = DetailBooking::with('Vehicle')
     ->where('booking_id', $id)
     ->get();
    // dd($ticket);
-return view('user.ticket', compact('ticket'));
+return view('user.ticket', compact('ticket','booking'));
 
-// Menyimpan data $ticket ke dalam session
-
-    
-    //return view('user.ticket',compact('detail'));
 }
+
 }

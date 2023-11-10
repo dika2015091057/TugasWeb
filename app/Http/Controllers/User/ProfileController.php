@@ -2,8 +2,12 @@
 namespace App\Http\Controllers\User;
 
 use App\Models\User;
+use Illuminate\Http\Request;
+use function Laravel\Prompts\error;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller{
     public function view(){
@@ -11,4 +15,45 @@ class ProfileController extends Controller{
         
         return view('user.profile',compact('profile'));
     }
+
+    //TODO Update Profile
+    public function updateProfile(Request $request){
+        $user= User::where('user_id',Auth::user()->user_id)->first();
+
+        if($request->validemail==true && Hash::check($request->password, $user->password)){
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'address'=>$request->address,
+                'username'=>$request->username,
+                'phone_number'=>$request->phone_number,
+                'nik'=>$request->nik,
+                'updated_at'=>now()
+                ]
+            
+            ); 
+                    // Redirect after successful update
+                    Auth::logout();
+                    return redirect('/login');
+
+        } elseif ($request->validemail!=true && Hash::check($request->password, $user->password)) {
+            $user->update([
+                'name' => $request->name,
+                'address'=>$request->address,
+                'username'=>$request->username,
+                'phone_number'=>$request->phone_number,
+                'nik'=>$request->nik,
+                'updated_at'=>now()
+                ]
+            
+            ); 
+                    // Redirect after successful update
+
+                    return redirect()->route('view')->with('success', 'Profile updated successfully!');
+        }
+    
+        // Redirect back if passwords do not match
+        return redirect()->route('view')->with('error', 'Password incorrect. Profile update failed.');
+    }
+
 }
