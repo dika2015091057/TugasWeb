@@ -21,7 +21,9 @@ class ProfileController extends Controller{
         $user= User::where('user_id',Auth::user()->user_id)->first();
 
         if($request->validemail==true && Hash::check($request->password, $user->password)){
+            $uploadedFileUrl = cloudinary()->upload($request->file('photo')->getRealPath(),['folder'=>'penyewaan',])->getSecurePath();
             $user->update([
+                'photo_profile'=>$uploadedFileUrl,
                 'name' => $request->name,
                 'email' => $request->email,
                 'address'=>$request->address,
@@ -37,7 +39,9 @@ class ProfileController extends Controller{
                     return redirect('/login');
 
         } elseif ($request->validemail!=true && Hash::check($request->password, $user->password)) {
+            $uploadedFileUrl = cloudinary()->upload($request->file('photo')->getRealPath(),['folder'=>'penyewaan',])->getSecurePath();
             $user->update([
+                'photo_profile'=>$uploadedFileUrl,
                 'name' => $request->name,
                 'address'=>$request->address,
                 'username'=>$request->username,

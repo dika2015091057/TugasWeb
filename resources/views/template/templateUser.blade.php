@@ -21,7 +21,7 @@
         <header class="py-3 mb-3 border-bottom fixed-top bg-white">
             <div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 2fr 6fr 1fr 1fr;">
                 <div class="col-1">
-                    <a href="/"><img src="img/about.png" alt="" class="img-fluid"></a>
+                    <a href="/"><img src="img/jeep.png" alt="" class="" width="50" height="50"></a>
                 </div>
                 <div class="d-flex align-items-center">
                     <form class="w-100 me-3" role="search" action="{{ route('search') }}">
@@ -30,14 +30,14 @@
                 </div>
                 <div class="flex  d-flex justify-content-end ">
                     <a href="/bookings" class="d-block link-body-emphasis text-decoration-none">
-                        <img src="{{ Auth::user()->photo_profile }}" alt="mdo" width="50" height="50"
-                            class="rounded-circle">
+                        <img src="img/booking.png" alt="mdo" width="50" height="50"
+                            class=" img-fluid">
                     </a>
                 </div>
                 <div class="flex  d-flex justify-content-end ">
                     <a href="/profile" class="d-block link-body-emphasis text-decoration-none">
                         <img src="{{ Auth::user()->photo_profile }}" alt="m" width="50" height="50"
-                            class="rounded-circle shadow shadow-sm">
+                            class="rounded-circle shadow shadow-sm ">
                     </a>
                 </div>
             </div>

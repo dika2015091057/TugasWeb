@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('nik')->nullable();
             $table->string('username')->unique();
-            $table->string('photo_profile')->nullable();
+            $table->string('photo_profile')->nullable()->default("https://www.kindpng.com/picc/m/381-3812277_ville-de-saint-etienne-png-download-gambar-icon.png");
             $table->text('address')->nullable();
             $table->string('phone_number');
             $table->string('email')->unique();

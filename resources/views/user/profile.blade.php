@@ -4,11 +4,12 @@
 <div class="container mt-5">
 
     <div class="card row m-2 px-5 pt-5">
+        <form action="{{ route('updateProfile') }}" method="post" enctype="multipart/form-data" class=" px-0">
+            @csrf
         <div class="col-3 px-0 py m-1" style="height: 300px; width: 300px;">
             <img src="{{ $profile->photo_profile }}" alt="" width="100%" height="100%" class="rounded-4">
+            <input type="file" name="photo" accept="image/jpeg, image/png">
         </div>
-        <form action="{{ route('updateProfile') }}" method="post" class=" px-0">
-            @csrf
 
             <div class="flex d-flex flex-row flex-wrap justify-content-between mt-5 p-1 mb-5">
                 <div class="d-flex flex-column m-2 col-4">

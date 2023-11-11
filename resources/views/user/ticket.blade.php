@@ -1,29 +1,86 @@
 @extends('template.templateUser')
-@section('main')    
+@section('main')
+<header>
+    <div class="col-4 offset-1">
 
-<div class="section">
-    <div class="card row col-6 offset-3 ">
-        <div class="col">
-            <h1 class=" text-center">Tiket Booking</h1>
-        </div>
-        <div class="col d-flex flex-column justify-content-center gap-2">
-            <div class="card col-10">
-            <p><span style="font-weight: bold;">Nama Pemesan :</span> {{ Auth::user()->name}}</p>
-            </div>
-            @foreach ($ticket as $tickets)
-            <div class="card col-10">
-                <p><span style="font-weight: bold;">Nama Kendaraan :</span> {{ $tickets->vehicle->name }}</p>
-                <p><span style="font-weight: bold;">Jumlah Kendaraan :</span> {{ $tickets->qty }}</p>
-                <p><span style="font-weight: bold;">Tanggal Pengambilan :</span> {{ $tickets->pickup_date }}</p>
-                <p><span style="font-weight: bold;">Tanggal Pengembalian :</span> {{ $tickets->return_date }}</p>
-                <p><span style="font-weight: bold;">Harga Sewa :</span> {{ $tickets->price_total_charter }}</p>
-            </div>
-            @endforeach
-            <div class="card col-10">
-                <p class=" text-center"><span style="font-weight: bold;">Total Harga Sewa :</span> {{ $booking->price_total_booking }}</p>
-            </div>
-        </div>
-
+        <p><a class=" text-decoration-none text-black " href="/bookings"> Bookings</a> ><a href="/ticket{{ $booking['booking_id'] }}}}" class=" text-decoration-none text-base ">Ticket</a></p>
     </div>
-</div>
+</header>
+    @foreach ($ticket as $tickets)
+        <div class="container">
+            <div class="row card d-flex flex-row mt-5 align-items-end">
+                <header class=" row justify-content-end">
+                    <form action="{{ route('downloadTicket') }}" method="post" class="col-2 offset-1 mb-3">
+                        @csrf
+                        <input type="hidden" name="detail_booking_id" value="{{ $tickets->detail_booking_id }}">
+                        <button class="mt-3 text-bg-primary" type="submit">Download</button>
+                    </form>
+                </header>
+                <div class="col-4  d-flex flex-column">
+                    <header>
+                        <h5 class="text-center">ID Ticket : {{ $tickets->detail_booking_id }}</h5>
+                    </header>
+
+                    <body>
+                        <img src="{{ $tickets->vehicle->vehicle_photo }}" alt="kendaraan" height="50%" width="100%"
+                            srcset="">
+                    </body>
+                    <footer class="d-flex justify-content-start align-items-center">
+                        <div class="card bg-primary-subtle mt-3 " style="width: 50%;">
+                            <p class="text-center m-1">{{ $tickets->status }}</p>
+                        </div>
+                    </footer>
+                </div>
+                <div class="col-6 mb-5">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Nama Pemesan</th>
+                                <td>{{ Auth::user()->name }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Nama Kendaraan</th>
+                                <td>RX King Terkencang</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Jumlah Kendaraan</th>
+                                <td>{{ $tickets->qty }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Tanggal Pengambilan</th>
+                                <td>{{ $tickets->pickup_date }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Tanggal Pengembalian</th>
+                                <td>{{ $tickets->return_date }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Harga Sewa / Hari</th>
+                                <td>Rp. {{ $tickets->vehicle->charter_price }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Jumlah Hari</th>
+                                <td>{{ $tickets->day }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Alamat Toko</th>
+                                <td>{{ $admin->address }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Harga Sewa Total</th>
+                                <td>Rp. {{ $tickets->price_total_charter }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <form action="{{ route('deleteticket') }}" method="post" class="col-1 offset-1 mb-3">
+                    @csrf
+                    <input type="hidden" name="detail_booking_id" value="{{ $tickets->detail_booking_id }}">
+                    <input type="hidden" name="booking_id" value="{{ $booking['booking_id'] }}">
+                    <button  type="submit">Hapus</button>
+                </form>
+            </div>
+        </div>
+    @endforeach
 @endsection

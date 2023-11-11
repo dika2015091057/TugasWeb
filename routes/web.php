@@ -46,6 +46,10 @@ Route::group(['middleware'=>'auth:user'],function (){
     Route::get('/bookings', [BookingController::class, 'bookings'])->name('bookings');
     Route::get('/profile', [ProfileController::class, 'view'])->name('view');
     Route::post('/updateprofile', [ProfileController::class, 'updateProfile'])->name('updateProfile');
+    Route::post('/download', [UserController::class, 'DownloadTicket'])->name('downloadTicket');
+    Route::post('/deletebooking', [BookingController::class, 'deletebooking'])->name('deletebooking');
+    Route::post('/deleteticket', [BookingController::class, 'deleteticket'])->name('deleteticket');
+    
 });
 // ROUTE FOR ADMIN
 Route::middleware(['auth:admin'])->group(function () {

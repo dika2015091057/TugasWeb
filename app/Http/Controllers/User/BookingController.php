@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\User;
 
 
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use App\Models\Update;
 use App\Models\Booking;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use App\Models\DetailBooking;
 use App\Models\UpdateBooking;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -50,6 +53,7 @@ class BookingController extends Controller
                             $total = $request->input('total');
                             $pickup = $request->input('pengambilan');
                             $return = $request->input('pengembalian');
+                            $day = $request->input('day');
 
                             $detail = new DetailBooking();
                             $detail->booking_id = $booking_id;
@@ -58,13 +62,21 @@ class BookingController extends Controller
                             $detail->price_total_charter = $total;
                             $detail->pickup_date = $pickup;
                             $detail->return_date = $return;
+                            $detail->day = $day;
                             $detail->save();
 
                             $count = $totalprice + ($detail->price_total_charter);
                             $update = Booking::where('booking_id', $booking_id)->first();
+                            $updateqty = Vehicle::where('vehicle_id', $vehicleId)->first();
+
+
+
+
                             //dd($newBookingId);
                             // $update->price_total_booking=$count;
                             $update->update(['price_total_booking' => $count]);
+                            $countqty = ($updateqty->stock) - $qty;
+                            $updateqty->update(['stock' => $countqty]);
                             // ];
 
                             // $ticket =DetailBooking::where('booking_id',$booking_id)->get();
@@ -72,7 +84,7 @@ class BookingController extends Controller
 
 
                             // Melakukan redirect ke route baru
-                            return redirect()->route('ticket',$booking_id);
+                            return redirect()->route('ticket', $booking_id);
                         }
                     }
                 }
@@ -87,6 +99,7 @@ class BookingController extends Controller
         $total = $request->input('total');
         $pickup = $request->input('pengambilan');
         $return = $request->input('pengembalian');
+        $day = $request->input('day');
 
         // create booking database
         $booking = new Booking();
@@ -105,8 +118,15 @@ class BookingController extends Controller
         $detail->price_total_charter = $total;
         $detail->pickup_date = $pickup;
         $detail->return_date = $return;
+        $detail->day = $day;
         $detail->save();
 
+        // update stock vehicle after booking
+        $detail->save();
+
+        $updateqty = Vehicle::where('vehicle_id', $vehicleId)->first();
+        $countqty = ($updateqty->stock) - $qty;
+        $updateqty->update(['stock' => $countqty]);
 
         $countprice = ($booking->price_total_booking) + ($detail->price_total_charter);
         $update = Booking::where('booking_id', $newBookingId)->first();
@@ -125,22 +145,7 @@ class BookingController extends Controller
     {
         $userId = Auth::user()->user_id;
 
-        // $booking = Booking::with('detail')->where('user_id', $userId)->get();
-
-        // $details = DB::table('detail_bookings')
-        // ->leftJoin('bookings', 'detail_bookings.booking_id', '=', 'bookings.booking_id')
-        // ->where('bookings.user_id',$userId)
-        // ->groupBy('detail_bookings.booking_id')
-        // ->get();
-        // $booking = Booking::select('bookings.*', 'admins.username as admin_name', 'admins.admin_id')
-        // ->leftJoin('detail_bookings', 'bookings.booking_id', '=', 'detail_bookings.booking_id')
-        // ->leftJoin('vehicles', 'detail_bookings.vehicle_id', '=', 'vehicles.vehicle_id')
-        // ->leftJoin('admins', 'vehicles.admin_id', '=', 'admins.admin_id')
-        // ->where('bookings.user_id', $userId)
-        // ->groupBy('bookings.booking_id') 
-        // ->get();
-
-        $booking = Booking::select('bookings.booking_id', 'bookings.price_total_booking', 'bookings.status', DB::raw('MAX(admins.username) AS admin_name'), DB::raw('MAX(admins.photo_profile) AS admin_photo'), DB::raw('MAX(admins.admin_id) AS admin_id'))
+        $booking = Booking::select('bookings.booking_id', 'bookings.price_total_booking', 'bookings.status', DB::raw('MAX(admins.username) AS admin_name'), DB::raw('MAX(admins.photo_profile) AS admin_photo'),DB::raw('MAX(admins.address) AS admin_address'), DB::raw('MAX(admins.admin_id) AS admin_id'))
             ->leftJoin('detail_bookings', 'bookings.booking_id', '=', 'detail_bookings.booking_id')
             ->leftJoin('vehicles', 'detail_bookings.vehicle_id', '=', 'vehicles.vehicle_id')
             ->leftJoin('admins', 'vehicles.admin_id', '=', 'admins.admin_id')
@@ -159,51 +164,86 @@ class BookingController extends Controller
         return view('user.booking', compact('booking'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    // //TODO Download DetailBooking
+    // public function downloadpdf()
+    // {
+    //     $userId = Auth::user()->user_id;
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+    //     $booking = Booking::select('bookings.booking_id', 'bookings.price_total_booking', 'bookings.status', DB::raw('MAX(admins.username) AS admin_name'), DB::raw('MAX(admins.photo_profile) AS admin_photo'), DB::raw('MAX(admins.admin_id) AS admin_id'))
+    //         ->leftJoin('detail_bookings', 'bookings.booking_id', '=', 'detail_bookings.booking_id')
+    //         ->leftJoin('vehicles', 'detail_bookings.vehicle_id', '=', 'vehicles.vehicle_id')
+    //         ->leftJoin('admins', 'vehicles.admin_id', '=', 'admins.admin_id')
+    //         ->where('bookings.user_id', $userId)
+    //         ->groupBy('bookings.booking_id', 'bookings.price_total_booking', 'bookings.status')
+    //         ->get();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+    //     $html = view('user.booking', compact('booking'))->render();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    //     // Configure Dompdf
+    //     $options = new Options();
+    //     $options->set('isHtml5ParserEnabled', true);
+    //     $options->set('isRemoteEnabled', true);
+
+    //     $dompdf = new Dompdf($options);
+    //     $dompdf->loadHtml($html);
+
+    //     // Render PDF
+    //     $dompdf->render();
+
+    //     // Download the generated PDF
+    //     return $dompdf->stream('invoice.pdf');
+    // }
+
+    public function deletebooking(Request $request)
     {
-        //
+        $bookingId = $request->input('booking_id');
+
+        // Cek apakah ada detail booking dengan status 'proses'
+        $hasOngoingStatus = DetailBooking::where('booking_id', $bookingId)
+            ->where('status', 'belum dibayar')
+            ->exists();
+        
+        if (!$hasOngoingStatus) {
+            // Hapus detail booking dan booking jika tidak ada yang memiliki status 'proses'
+            $detailBookings = DetailBooking::where('booking_id', $bookingId)->get();
+            $detailBookings->each->delete();
+        
+            $booking = Booking::find($bookingId);
+            if ($booking) {
+                $booking->delete();
+            }
+        
+            return redirect()->route('bookings', Auth::user()->user_id);
+        } else {
+            return redirect()->back()->with('error', 'Tidak dapat menghapus karena ada detail booking dalam status "proses".');
+        }
+    }
+    public function deleteticket(Request $request)
+    {
+
+
+        $detailBookings = DetailBooking::where('detail_booking_id', $request->input('detail_booking_id'))->first();
+        $vehicle = Vehicle::where('vehicle_id', $detailBookings->vehicle_id)->first();
+        $count = $vehicle->stock + $detailBookings->qty;
+     
+        
+        //$detailBookings->each->delete();
+        $ticket = DetailBooking::find($request->input('detail_booking_id'));
+
+        if ($ticket) {
+            $ticket->delete();
+
+            $vehicle->stock = $count; // Misalnya, mengurangi qty sebanyak 1
+            $vehicle->save();
+        }
+
+        $Bookings = DetailBooking::where('booking_id', $request->input('booking_id'))->get();
+        if ($Bookings->isNotEmpty()) {
+
+            return redirect()->route('ticket', $request->booking_id);
+        }
+        return redirect()->route('bookings', Auth::user()->user_id);
     }
 }
