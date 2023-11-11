@@ -55,7 +55,7 @@
 
 
         </form>
-        <form action="{{ route('logout') }}" method="POST">
+        <form action="{{ route('logoutuser') }}" method="POST">
             @csrf
             @method('DELETE')
             <div class=" d-flex col-6 mb-3 offset-6 d-flex justify-content-end align-items-center">
