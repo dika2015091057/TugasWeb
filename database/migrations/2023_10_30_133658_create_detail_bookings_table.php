@@ -17,8 +17,10 @@ return new class extends Migration
             $table->bigInteger('booking_id')->unsigned();
             $table->bigInteger('qty');
             $table->double('price_total_charter',12 ,2)->default(0);
-            $table->timestamp('pickup_date')->nullable();
-            $table->timestamp('return_date')->nullable();
+            $table->date('pickup_date')->nullable();
+            $table->date('return_date')->nullable();
+            $table->integer('day')->default(0);
+            $table->string('status')->default("belum dibayar");
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles');

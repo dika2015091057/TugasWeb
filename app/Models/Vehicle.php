@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Vehicle extends Model
 {
     use HasFactory;
+protected $primaryKey = 'vehicle_id';
 protected $fillable =[
     'admin_id',
     'name',
@@ -20,6 +21,7 @@ protected $fillable =[
     'description',      
     'created_at',      
     'updated_at',
+    'vehicle_photo',
 ];
 
 public function admin(){

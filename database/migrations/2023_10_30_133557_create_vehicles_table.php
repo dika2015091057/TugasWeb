@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('type');
             $table->double('charter_price', 12, 2);
             $table->string('status')->nullable();
+            $table->string('vehicle_photo');
             $table->text('description');
             $table->timestamps();
             $table->softDeletes();
