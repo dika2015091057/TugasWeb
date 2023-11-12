@@ -1,12 +1,13 @@
 @extends('template.templateUser')
-@section('title','Detail | ')
+@section('title', 'Detail | ')
 @section('main')
-<header>
-    <div class="col-4 offset-1">
+    <header>
+        <div class="col-4 offset-1">
 
-        <p  class="mt-3"><a class=" text-decoration-none text-black " href="/"> Dashboard</a> ><a href="/detail{{ $vehicle['vehicle_id'] }}" class=" text-decoration-none text-base ">Detail</a></p>
-    </div>
-</header>
+            <p class="mt-3"><a class=" text-decoration-none text-black " href="/"> Dashboard</a> ><a
+                    href="/detail{{ $vehicle['vehicle_id'] }}" class=" text-decoration-none text-base ">Detail</a></p>
+        </div>
+    </header>
     <div class="container-card  d-flex flex-wrap gap-2 justify-content-start offset-1 mt-5" style="height: 500px;">
         <div class="card d-flex flex-row flex-wrap gap-2 col-6 px-1 py-1" style="height: 100%;">
             <div class="col-5 image-container d-flex" style="height: 80%;">
@@ -48,7 +49,7 @@
                 @csrf
                 <input type="hidden" name="vehicle_id" value="{{ $vehicle->vehicle_id }}">
                 <div class="row d-flex mt-3 ">
-                    <div class="card col-5 offset-1 d-flex flex-row gap-2 py-1 shadow justify-content-between" >
+                    <div class="card col-5 offset-1 d-flex flex-row gap-2 py-1 shadow justify-content-between">
                         <button type="button"
                             class="border border-0 bg-transparent col-1 d-flex justify-content-center align-items-center"
                             onclick="changeValue('plus'),updateTotal('plus')">+</button>
@@ -70,15 +71,15 @@
                 </div>
                 <div class="row d-flex mt-2  ">
                     <label class="col-5 offset-1 ps-0 py-2" for="pengembalian">Pengembalian:</label>
-                    <input class="col-5 px-1 me-1 border border-light-subtle rounded-3 justify-content-end" type="date" id="pengembalian"
-                        name="pengembalian" onclick="sewa()">
+                    <input class="col-5 px-1 me-1 border border-light-subtle rounded-3 justify-content-end" type="date"
+                        id="pengembalian" name="pengembalian" onclick="sewa()">
                 </div>
                 <div class="row d-flex mt-2 justify-content-start ms-1 gap-3 ">
                     <p class="col-4">Hari Sewa</p>
                     <div class="col-5">
                         <label for="total" class="col-2 text-end"></label>
-                        <input class=" col-9 border-0 " type="number" name="day" id="harisewa"
-                            value="0" readonly>
+                        <input class=" col-9 border-0 " type="number" name="day" id="harisewa" value="0"
+                            readonly>
                     </div>
                 </div>
                 <div class="row d-flex mt-5 justify-content-center gap-3 ">
@@ -99,6 +100,35 @@
     </div>
     </div>
 
+    <section class="slider_container mt-5">
+        <div class="container border">
+            <div class="swiper card_slider">
+                <div class="swiper-wrapper">
+                    @foreach ($adminVehicles as $vehicles)
+                        <div class="swiper-slide">
+                            <form action="{{ route('detail', ['id' => $vehicles->vehicle_id]) }}" method="get" class="d-flex m-2">
+                                @csrf
+                                <button type="submit" class="border-0">
+                                    <div class="card d-grid" style="height: 100%; width:100%;">
+                                        <div class="card">
+                                            <img src="{{ $vehicles->vehicle_photo }}" alt="" height="200px">
+                                        </div>
+                                        <div class="border ">
+                                            <h5 class="text-center">{{ $vehicles->name }}</h5>
+                                            <p class="text-center">{{ $vehicle->charter_price }}</p>
+                                            <p class="text-gray text-end me-1">stock: {{ $vehicles->stock }}</p>
+                                        </div>
+                                    </div>
+                                </button>
+                            </form>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+    </section>
+
     <script>
         function changeValue(operation) {
             var qtyInput = document.getElementById("qty");
@@ -111,23 +141,24 @@
                 qtyInput.value = currentValue - 1;
             }
         }
+
         function Sewa() {
-        var datePengambilan = document.getElementById("pengambilan").value;
-        var datePengembalian = document.getElementById("pengembalian").value;
+            var datePengambilan = document.getElementById("pengambilan").value;
+            var datePengembalian = document.getElementById("pengembalian").value;
 
             // Jika tanggal pengambilan atau pengembalian kosong, set harisewa menjadi 0
-    if (datePengambilan === '' || datePengembalian === '') {
-        document.getElementById("harisewa").value = 0;
-    } else {
-        var datetimePengambilan = new Date(datePengambilan);
-        var datetimePengembalian = new Date(datePengembalian);
+            if (datePengambilan === '' || datePengembalian === '') {
+                document.getElementById("harisewa").value = 0;
+            } else {
+                var datetimePengambilan = new Date(datePengambilan);
+                var datetimePengembalian = new Date(datePengembalian);
 
-        var timeDiff = datetimePengembalian.getTime() - datetimePengambilan.getTime();
-        var duration = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                var timeDiff = datetimePengembalian.getTime() - datetimePengambilan.getTime();
+                var duration = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-        document.getElementById("harisewa").value = duration;
-    }
-        updateTotal();
+                document.getElementById("harisewa").value = duration;
+            }
+            updateTotal();
         }
 
         function updateTotal() {
@@ -137,7 +168,7 @@
 
 
             if (!isNaN(qty) && !isNaN(price)) {
-                var total = qty * price *hari;
+                var total = qty * price * hari;
                 document.getElementById("total").value = total;
             } else {
                 document.getElementById("total").value = "0";
@@ -150,7 +181,7 @@
             var stock = parseInt(document.getElementById('stock').getAttribute('data-value'));
             var bookingButton = document.getElementById("bookingButton");
             var total = parseFloat(document.getElementById("total").value);
-            if (stock <= 0 || total <=0 ) {
+            if (stock <= 0 || total <= 0) {
                 bookingButton.disabled = true; // Jika stok 0, tombol akan dinonaktifkan
             } else {
                 bookingButton.disabled = false; // Jika ada stok, tombol tetap aktif
@@ -165,11 +196,23 @@
 
         updateTotal();
 
-         // Panggil fungsi Sewa() setiap kali tanggal diubah
-    document.getElementById("pengambilan").addEventListener("change", Sewa);
-    document.getElementById("pengembalian").addEventListener("change", Sewa);
+        // Panggil fungsi Sewa() setiap kali tanggal diubah
+        document.getElementById("pengambilan").addEventListener("change", Sewa);
+        document.getElementById("pengembalian").addEventListener("change", Sewa);
 
-    // Panggil updateTotal() untuk menginisialisasi total awal
-    updateTotal();
+        // Panggil updateTotal() untuk menginisialisasi total awal
+        updateTotal();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        var swiper = new Swiper(".card_slider", {
+            slidesPerView: '4', // Jumlah slide yang ditampilkan
+            spaceBetween: 30, // Spasi antar slide
+            direction: 'horizontal', // Atur arah swiper menjadi horizontal
+            loop: true, // Untuk membuat efek loop
+            allowTouchMove: true,
+
+
+        });
     </script>
 @endsection

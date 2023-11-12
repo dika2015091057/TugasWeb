@@ -138,14 +138,12 @@ class BookingController extends Controller
         //return response()->json(['message' => 'Booking created', 'booking_id' => $newBookingId], 201);
     }
 
-
-
     //TODO Booking Details
     public function bookings()
     {
         $userId = Auth::user()->user_id;
 
-        $booking = Booking::select('bookings.booking_id', 'bookings.price_total_booking', 'bookings.status', DB::raw('MAX(admins.username) AS admin_name'), DB::raw('MAX(admins.photo_profile) AS admin_photo'),DB::raw('MAX(admins.address) AS admin_address'), DB::raw('MAX(admins.admin_id) AS admin_id'))
+        $booking = Booking::select('bookings.booking_id', 'bookings.price_total_booking', 'bookings.status', DB::raw('MAX(admins.username) AS admin_name'), DB::raw('MAX(admins.photo_profile) AS admin_photo'), DB::raw('MAX(admins.address) AS admin_address'), DB::raw('MAX(admins.admin_id) AS admin_id'))
             ->leftJoin('detail_bookings', 'bookings.booking_id', '=', 'detail_bookings.booking_id')
             ->leftJoin('vehicles', 'detail_bookings.vehicle_id', '=', 'vehicles.vehicle_id')
             ->leftJoin('admins', 'vehicles.admin_id', '=', 'admins.admin_id')
@@ -164,38 +162,7 @@ class BookingController extends Controller
         return view('user.booking', compact('booking'));
     }
 
-
-    // //TODO Download DetailBooking
-    // public function downloadpdf()
-    // {
-    //     $userId = Auth::user()->user_id;
-
-    //     $booking = Booking::select('bookings.booking_id', 'bookings.price_total_booking', 'bookings.status', DB::raw('MAX(admins.username) AS admin_name'), DB::raw('MAX(admins.photo_profile) AS admin_photo'), DB::raw('MAX(admins.admin_id) AS admin_id'))
-    //         ->leftJoin('detail_bookings', 'bookings.booking_id', '=', 'detail_bookings.booking_id')
-    //         ->leftJoin('vehicles', 'detail_bookings.vehicle_id', '=', 'vehicles.vehicle_id')
-    //         ->leftJoin('admins', 'vehicles.admin_id', '=', 'admins.admin_id')
-    //         ->where('bookings.user_id', $userId)
-    //         ->groupBy('bookings.booking_id', 'bookings.price_total_booking', 'bookings.status')
-    //         ->get();
-
-
-    //     $html = view('user.booking', compact('booking'))->render();
-
-    //     // Configure Dompdf
-    //     $options = new Options();
-    //     $options->set('isHtml5ParserEnabled', true);
-    //     $options->set('isRemoteEnabled', true);
-
-    //     $dompdf = new Dompdf($options);
-    //     $dompdf->loadHtml($html);
-
-    //     // Render PDF
-    //     $dompdf->render();
-
-    //     // Download the generated PDF
-    //     return $dompdf->stream('invoice.pdf');
-    // }
-
+    //TODO Delete Booking
     public function deletebooking(Request $request)
     {
         $bookingId = $request->input('booking_id');
@@ -204,31 +171,31 @@ class BookingController extends Controller
         $hasOngoingStatus = DetailBooking::where('booking_id', $bookingId)
             ->where('status', 'belum dibayar')
             ->exists();
-        
+
         if (!$hasOngoingStatus) {
             // Hapus detail booking dan booking jika tidak ada yang memiliki status 'proses'
             $detailBookings = DetailBooking::where('booking_id', $bookingId)->get();
             $detailBookings->each->delete();
-        
+
             $booking = Booking::find($bookingId);
             if ($booking) {
                 $booking->delete();
             }
-        
+
             return redirect()->route('bookings', Auth::user()->user_id);
         } else {
             return redirect()->back()->with('error', 'Tidak dapat menghapus karena ada detail booking dalam status "proses".');
         }
     }
+
+    //TODO Delete Ticket
     public function deleteticket(Request $request)
     {
-
-
         $detailBookings = DetailBooking::where('detail_booking_id', $request->input('detail_booking_id'))->first();
         $vehicle = Vehicle::where('vehicle_id', $detailBookings->vehicle_id)->first();
         $count = $vehicle->stock + $detailBookings->qty;
-     
-        
+
+
         //$detailBookings->each->delete();
         $ticket = DetailBooking::find($request->input('detail_booking_id'));
 

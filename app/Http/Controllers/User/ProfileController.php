@@ -10,13 +10,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller{
+    // TODO View Profile
     public function view(){
         $profile=User::where('user_id', Auth::user()->user_id)->first();
         
         return view('user.profile',compact('profile'));
     }
 
-    //TODO Update Profile
+    // TODO Update Profile
     public function updateProfile(Request $request){
         $user= User::where('user_id',Auth::user()->user_id)->first();
 
