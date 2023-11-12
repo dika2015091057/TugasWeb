@@ -4,7 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>percobaan</title>
+    <title>@yield('title')All-Rent</title>
+    <link rel="icon" href="img/about.png" type="image/png">
     <style>
         body{
             padding-top: 5%;
@@ -49,9 +50,9 @@
         <div
             class="container-fluid row col-12 py-2 mx-0 d-flex justify-content-between align-items-center bg-body-secondary">
 
-            <div class="col-1 border">
+            <div class="col-1">
 
-                <a href="/"><img src="img/about.png" alt="" class="img-fluid"></a>
+                <a href="/"><img src="img/jeep.png" alt="" class="" width="50" height="50"></a>
             </div>
             <ul class="col-11 navbar mb-0 nav nav-pills d-flex justify-content-end gap-3" id="nav-pills">
                 <li class="nav-item">

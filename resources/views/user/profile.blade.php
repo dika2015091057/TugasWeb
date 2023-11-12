@@ -1,6 +1,9 @@
 @extends('template.templateUser')
 
-@yield('main')
+@section('title', 'Profile | ')
+@section('main')
+    
+
 <div class="container mt-5">
 
     <div class="card row m-2 px-5 pt-5">
@@ -64,3 +67,4 @@
         </form>
     </div> 
 </div>
+@endsection

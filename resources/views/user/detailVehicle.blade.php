@@ -1,9 +1,10 @@
 @extends('template.templateUser')
+@section('title','Detail | ')
 @section('main')
 <header>
     <div class="col-4 offset-1">
 
-        <p><a class=" text-decoration-none text-black " href="/"> Dashboard</a> ><a href="/detail{{ $vehicle['vehicle_id'] }}" class=" text-decoration-none text-base ">Booking</a></p>
+        <p  class="mt-3"><a class=" text-decoration-none text-black " href="/"> Dashboard</a> ><a href="/detail{{ $vehicle['vehicle_id'] }}" class=" text-decoration-none text-base ">Detail</a></p>
     </div>
 </header>
     <div class="container-card  d-flex flex-wrap gap-2 justify-content-start offset-1 mt-5" style="height: 500px;">

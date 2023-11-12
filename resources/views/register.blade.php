@@ -1,9 +1,5 @@
-{{-- @extends('template.tamplateGuest')
-
-@section('title')
-<title>Login</title>
-@endsection --}}
 @extends('template.template')
+@section('title', 'Register | ')
 @section('register')
     <div class="container d-flex justify-content-end mt-5 ">
         <div class="row col-4 ">

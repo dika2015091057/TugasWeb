@@ -1,19 +1,20 @@
 @extends('template.templateUser')
+@section('title','Ticket | ')
 @section('main')
 <header>
     <div class="col-4 offset-1">
 
-        <p><a class=" text-decoration-none text-black " href="/bookings"> Bookings</a> ><a href="/ticket{{ $booking['booking_id'] }}}}" class=" text-decoration-none text-base ">Ticket</a></p>
+        <p class="mt-3"><a class=" text-decoration-none text-black " href="/bookings"> Bookings</a> ><a href="/ticket{{ $booking['booking_id'] }}}}" class=" text-decoration-none text-base ">Ticket</a></p>
     </div>
 </header>
     @foreach ($ticket as $tickets)
         <div class="container">
-            <div class="row card d-flex flex-row mt-5 align-items-end">
+            <div class="row card d-flex flex-row mt-5 align-items-end shadow">
                 <header class=" row justify-content-end">
-                    <form action="{{ route('downloadTicket') }}" method="post" class="col-2 offset-1 mb-3">
+                    <form action="{{ route('downloadTicket') }}" method="post" class="col-2 mb-3 text-end">
                         @csrf
                         <input type="hidden" name="detail_booking_id" value="{{ $tickets->detail_booking_id }}">
-                        <button class="mt-3 text-bg-primary" type="submit">Download</button>
+                        <button class="mt-3 btn btn-primary" type="submit">Download</button>
                     </form>
                 </header>
                 <div class="col-4  d-flex flex-column">
@@ -40,7 +41,7 @@
                             </tr>
                             <tr>
                                 <th scope="row">Nama Kendaraan</th>
-                                <td>RX King Terkencang</td>
+                                <td>{{ $tickets->vehicle->name }}</td>
                             </tr>
                             <tr>
                                 <th scope="row">Jumlah Kendaraan</th>
@@ -78,7 +79,7 @@
                     @csrf
                     <input type="hidden" name="detail_booking_id" value="{{ $tickets->detail_booking_id }}">
                     <input type="hidden" name="booking_id" value="{{ $booking['booking_id'] }}">
-                    <button  type="submit">Hapus</button>
+                    <button  class="btn btn-danger" type="submit">Hapus</button>
                 </form>
             </div>
         </div>
