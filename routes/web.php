@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Models\Booking;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
@@ -8,6 +9,8 @@ use App\Http\Controllers\Guest\GuestController;
 use App\Http\Controllers\User\BookingController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\Admin\DashboardAdminController;
+use App\Http\Controllers\Admin\VehicleController;
+use App\Http\Controllers\Admin\ProfileController  as AdminProfileController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -51,9 +54,15 @@ Route::group(['middleware'=>'auth:user'],function (){
     Route::post('/deleteticket', [BookingController::class, 'deleteticket'])->name('deleteticket');
     
 });
+
+
 // ROUTE FOR ADMIN
 Route::middleware(['auth:admin'])->group(function () {
     Route::get('/dashboardAdmin', [DashboardAdminController::class, 'showdashboard'])->name('showDashboardAdmin');
     Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/booking', [AdminBookingController::class, 'view'])->name('viewBooking');
+    Route::get('/vehicle', [VehicleController::class, 'view'])->name('viewVehicle');
+    Route::get('/adminprofile', [AdminProfileController::class, 'view'])->name('viewProfile');
+    Route::post('/adminprofileupdate', [AdminProfileController::class, 'update'])->name('updateAdmin');
 });
 
