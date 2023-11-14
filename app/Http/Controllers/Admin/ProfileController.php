@@ -1,46 +1,44 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\User;
+use App\Models\Admin;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
-use function Laravel\Prompts\error;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-    // TODO View Profile
+    //TODO View Profile Page
     public function view()
     {
-        $profile = User::where('user_id', Auth::user()->user_id)->first();
-
-        return view('user.profile', compact('profile'));
+        $admin = Auth::user();
+        $sum = Vehicle::where('admin_id', $admin->admin_id)->sum('stock');
+        return view('admin.profile', compact('admin', 'sum'));
     }
 
-    // TODO Update Profile
-    public function updateProfile(Request $request)
+    //TODO Update Profile 
+    public function update(request $request)
     {
-        $user = User::where('user_id', Auth::user()->user_id)->first();
+        $admin = Admin::where('admin_id', Auth::user()->admin_id)->first();
 
-        if ($request->validemail == true && Hash::check($request->password, $user->password)) {
+        if ($request->validemail == true && Hash::check($request->password, $admin->password)) {
             if ($request->file('photo') != null) {
                 $uploadedFileUrl = cloudinary()->upload($request->file('photo')->getRealPath(), ['folder' => 'penyewaan','transformation' => [
                     'width' => 300, 
                     'height' => 200, 
                     'crop' => 'fill' 
                 ]])->getSecurePath();
-                $user->update(
+                $admin->update(
                     [
                         'photo_profile' => $uploadedFileUrl,
-                        'name' => $request->name,
                         'email' => $request->email,
                         'address' => $request->address,
                         'username' => $request->username,
                         'phone_number' => $request->phone_number,
-                        'nik' => $request->nik,
+                        'owner' => $request->owner,
                         'updated_at' => now()
                     ]
 
@@ -49,14 +47,13 @@ class ProfileController extends Controller
                 Auth::logout();
                 return redirect('/login');
             }
-            $user->update(
+            $admin->update(
                 [
-                    'name' => $request->name,
                     'email' => $request->email,
                     'address' => $request->address,
                     'username' => $request->username,
                     'phone_number' => $request->phone_number,
-                    'nik' => $request->nik,
+                    'owner' => $request->owner,
                     'updated_at' => now()
                 ]
 
@@ -64,46 +61,43 @@ class ProfileController extends Controller
             // Redirect after successful update
             Auth::logout();
             return redirect('/login');
-        } elseif ($request->validemail != true && Hash::check($request->password, $user->password)) {
+        } elseif ($request->validemail != true && Hash::check($request->password, $admin->password)) {
+
             if ($request->file('photo') != null) {
                 $uploadedFileUrl = cloudinary()->upload($request->file('photo')->getRealPath(), ['folder' => 'penyewaan','transformation' => [
                     'width' => 300, 
                     'height' => 200, 
                     'crop' => 'fill' 
                 ]])->getSecurePath();
-                $user->update(
+                $admin->update(
                     [
                         'photo_profile' => $uploadedFileUrl,
-                        'name' => $request->name,
                         'address' => $request->address,
                         'username' => $request->username,
                         'phone_number' => $request->phone_number,
-                        'nik' => $request->nik,
+                        'owner' => $request->owner,
                         'updated_at' => now()
                     ]
 
                 );
                 // Redirect after successful update
-
-                return redirect()->route('view')->with('success', 'Profile updated successfully!');
+                return redirect()->route('viewProfile')->with('success', 'Profile updated successfully!');
             }
-            $user->update(
+            $admin->update(
                 [
-                    'name' => $request->name,
                     'address' => $request->address,
                     'username' => $request->username,
                     'phone_number' => $request->phone_number,
-                    'nik' => $request->nik,
+                    'owner' => $request->owner,
                     'updated_at' => now()
                 ]
-
             );
             // Redirect after successful update
 
-            return redirect()->route('view')->with('success', 'Profile updated successfully!');
+            return redirect()->route('viewProfile')->with('success', 'Profile updated successfully!');
         }
 
         // Redirect back if passwords do not match
-        return redirect()->route('view')->with('error', 'Password incorrect. Profile update failed.');
+        return redirect()->route('viewProfile')->with('error', 'Password incorrect. Profile update failed.');
     }
 }

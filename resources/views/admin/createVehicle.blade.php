@@ -1,0 +1,124 @@
+@extends('template.templateAdmin')
+@section('vehicle', 'active')
+
+@section('main')
+    <section class="row gap-4 me-2">
+
+        {{-- Section header Body --}}
+        <section class="card row shadow" style="background-color: #F5F5F5;">
+            <div class="col-12 head-card mb-1 mt-1">
+                <h2>Tambah Kendaraan</h2>
+                <p><a href="/" class="text-black text-decoration-none">Home</a> > <a href="/vehicle"
+                        class="text-decoration-none text-black">Manage Kendaraan</a> > <a href=""
+                        class="text-decoration-none">Tambah Kendaraan</a>
+                </p>
+            </div>
+                <section class="slider_container mt-1 d-flex justify-content-center">
+                    <div class="container shadow-sm m-3">
+                        <div class="swiper card_slider">
+                            <div class="swiper-wrapper">
+
+                                @foreach ($vehicles as $vehicle)
+                                    <div class="swiper-slide">
+                                        <form action="{{ route('admindetailvehicle',['vehicle_id' => $vehicle->vehicle_id]) }}" method="get"
+                                            class="d-flex  justify-content-center m-2">
+                                            @csrf
+                                            <button type="submit" class="border-0 text-decoration-none p-0 rounded">
+                                                <div class="card" style="height: 100%; width:100%;">
+                                                    <div class="card">
+                                                        <img src="{{ $vehicle->vehicle_photo }}" alt=""
+                                                            height="200px" class=" rounded">
+                                                    </div>
+                                                    <div class="">
+                                                        <h5 class="text-center">{{ $vehicle->name }}</h5>
+                                                        <p class="text-center">{{ $vehicle->charter_price }}</p>
+                                                        <p class="text-gray text-end me-1">stock: {{ $vehicle->stock }}</p>
+                                                    </div>
+                                                </div>
+                                            </button>
+                                        </form>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                </section>
+          
+        </section>
+        {{-- Section create --}}
+        <section class="card row p-3" style="background-color: #F5F5F5;">
+            <form class="was-validated" action="{{ route('newvehicle') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="name" placeholder="nama kendaraan anda"
+                        name="name" Required>
+                    <label for="name">Nama Kendaraan</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <select class="form-select" required aria-label="Jenis Kendaraan" name="type">
+                        <option value="">Silakan pilih Kendaraan</option>
+                        <option value="Mobil">Mobil</option>
+                        <option value="Motor">Motor</option>
+                        <option value="Sepeda">Sepeda</option>
+                    </select>
+                    <div class="invalid-feedback p-1">silakan pilih</div>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" id="stock" placeholder="jumlah stok kendaraan"
+                        name="stock" Required>
+                    <label for="stock">jumlah stok Kendaraan</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" id="charter_price" placeholder="Harga Sewa Harian"
+                        name="charter_price" Required>
+                    <label for="charter_price">Harga Sewa Harian</label>
+                </div>
+
+                <div class="mb-3">
+                    <label for="validationTextarea" class="form-label p-1">deskripsi</label>
+                    <textarea class="form-control" id="" placeholder="deskripsi kendaraan anda" rows="3" name="description"
+                        required></textarea>
+                    <div class="invalid-feedback p-1">
+                        tolong masukkan deskripsi
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="password" placeholder="masukkan password"
+                        name="password" Required>
+                    <label for="password">Password Validasi</label>
+                </div>
+
+                <div class="mb-3">
+                    <input type="file" name="photo" accept="image/jpeg, image/png" class="form-control"
+                        aria-label="file example" required>
+                    <div class="invalid-feedback p-1">masukkan gambar kendaraan anda</div>
+                </div>
+
+                <div class="mb-3">
+                    <button class="btn btn-primary" type="submit"><i class="fa-solid fa-circle-up"></i> Tambahkan
+                        Kendaraan</button>
+                </div>
+            </form>
+        </section>
+
+
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        var swiper = new Swiper(".card_slider", {
+            slidesPerView: '4',
+            direction: 'horizontal',
+            loop: false,
+            allowTouchMove: true,
+            pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+
+
+        });
+    </script>
+@endsection

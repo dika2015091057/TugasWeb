@@ -5,11 +5,15 @@ namespace App\Models;
 use App\Models\User;
 use App\Models\DetailBooking;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Booking extends Model
 {
+    use SoftDeletes;
+
     use HasFactory;
+    protected $dates = ['deleted_at'];
     protected $table = 'bookings';
     protected $primaryKey = 'booking_id';
     protected $fillable = [
@@ -21,9 +25,9 @@ class Booking extends Model
         ];
 
         public function detail(){
-            return $this->hasMany(DetailBooking::class,'booking_id');
+            return $this->hasMany(DetailBooking::class,'booking_id')->withTrashed();
         }
         public function user(){
-            return $this->belongsTo(User::class, 'user_id');
+            return $this->belongsTo(User::class, 'user_id')->withTrashed();
         }
 }

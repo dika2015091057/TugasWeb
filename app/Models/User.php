@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Models\Booking;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -18,6 +19,9 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    use SoftDeletes;
+
+    protected $dates = ['deleted_at'];
     protected $primaryKey ='user_id';
     protected $fillable = [
         'name',
@@ -51,6 +55,6 @@ class User extends Authenticatable
     ];
 
     public function booking(){
-        return $this->hasMany(Booking::class,'user_id');
+        return $this->hasMany(Booking::class,'user_id')->withTrashed();
     }
 }

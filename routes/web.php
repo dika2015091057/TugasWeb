@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Models\Booking;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
@@ -8,6 +9,8 @@ use App\Http\Controllers\Guest\GuestController;
 use App\Http\Controllers\User\BookingController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\Admin\DashboardAdminController;
+use App\Http\Controllers\Admin\VehicleController;
+use App\Http\Controllers\Admin\ProfileController  as AdminProfileController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -51,9 +54,28 @@ Route::group(['middleware'=>'auth:user'],function (){
     Route::post('/deleteticket', [BookingController::class, 'deleteticket'])->name('deleteticket');
     
 });
+
+
 // ROUTE FOR ADMIN
 Route::middleware(['auth:admin'])->group(function () {
-    Route::get('/dashboardAdmin', [DashboardAdminController::class, 'showdashboard'])->name('showDashboardAdmin');
     Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/dashboardAdmin', [DashboardAdminController::class, 'showdashboard'])->name('showDashboardAdmin');
+    Route::get('/booking', [AdminBookingController::class, 'view'])->name('viewBooking');
+    Route::post('/admindeletebooking', [AdminBookingController::class, 'delete'])->name('admindeleteboking');
+    Route::get('/admindetail{booking_id}', [AdminBookingController::class, 'detailView'])->name('viewDetailBooking');
+    Route::post('/updatedetailstatus', [AdminBookingController::class,'updateStatus'])->name('updatedetailstatus');
+    Route::post('/deletedetailbooking', [AdminBookingController::class,'deleteDetailBooking'])->name('deletedetailbooking');
+    Route::get('/vehicle', [VehicleController::class, 'view'])->name('viewVehicle');
+    Route::get('/addvehicle', [VehicleController::class, 'create'])->name('createvehicle');
+    Route::post('/newvehicle', [VehicleController::class, 'createVehicle'])->name('newvehicle');
+   
+    Route::get('/viewdetailvehicle{vehicle_id}', [VehicleController::class, 'viewDetailVehicle'])->name('admindetailvehicle');
+    Route::get('/viewupdatevehicle{vehicle_id}', [VehicleController::class, 'viewUpdateVehicle'])->name('viewadminupdatevehicle');
+    Route::post('/updatevehicle', [VehicleController::class, 'updateVehicle'])->name('adminupdatevehicle');
+   
+    Route::post('/deletevehicle', [VehicleController::class, 'delete'])->name('deletevehicle');
+    Route::get('/adminprofile', [AdminProfileController::class, 'view'])->name('viewProfile');
+    Route::post('/adminprofileupdate', [AdminProfileController::class, 'update'])->name('updateAdmin');
+
 });
 
