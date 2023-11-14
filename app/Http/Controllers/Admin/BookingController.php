@@ -45,8 +45,22 @@ class BookingController extends Controller
     public function detailView(request $request)
     {
         $id = $request->booking_id;
-        $details = DetailBooking::where('booking_id', $id)->with('booking.user', 'vehicle')->paginate(5);
-        return view('admin.detailBooking', compact('details', 'id'));
+        $booking = DetailBooking::where('booking_id', $id)
+        ->where('status', '!=', 'lunas') // Filter status bukan "lunas"
+        ->first();
+        if ($booking){
+            $update=Booking::where('booking_id',$id)->first();
+            $update->status='Proses';
+            $update->save();
+            $details = DetailBooking::where('booking_id', $id)->with('booking.user', 'vehicle')->paginate(5);
+            return view('admin.detailBooking', compact('details', 'id'));
+        }else{
+            $update=Booking::where('booking_id',$id)->first();
+            $update->status='Selesai';
+            $update->save();
+            $details = DetailBooking::where('booking_id', $id)->with('booking.user', 'vehicle')->paginate(5);
+            return view('admin.detailBooking', compact('details', 'id'));
+        }
     }
 
     //TODO Update Status Detail Booking

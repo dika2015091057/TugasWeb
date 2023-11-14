@@ -95,12 +95,15 @@
                             <td>{{ $vehicle->status }}</td>
                             <td>
                                 <div class="container d-flex flex-row gap-2 justify-content-center">
-                                    <form action="" method="GET">
-                                        @csrf
-                                        <input type="hidden" name="booking_id" value="{{ $vehicle->vehicle_id }}">
+                                    <form action="{{ route('admindetailvehicle',['vehicle_id' => $vehicle->vehicle_id]) }}" method="GET">   
                                         <button type="submit" class="btn btn-info">
                                             <i class="fa-solid fa-pen-to-square fa-bounce"></i>
                                             Detail</button>
+                                    </form>
+                                    <form action="{{ route('viewadminupdatevehicle',['vehicle_id' => $vehicle->vehicle_id]) }}" method="GET">
+                                        <button type="submit" class="btn btn-info">
+                                            <i class="fa-solid fa-pen-nib fa-bounce"></i>
+                                            Update</button>
                                     </form>
                                     <form action="{{ route('deletevehicle') }}" method="POST">
                                         @csrf

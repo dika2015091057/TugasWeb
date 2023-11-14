@@ -27,7 +27,11 @@ class ProfileController extends Controller
 
         if ($request->validemail == true && Hash::check($request->password, $user->password)) {
             if ($request->file('photo') != null) {
-                $uploadedFileUrl = cloudinary()->upload($request->file('photo')->getRealPath(), ['folder' => 'penyewaan',])->getSecurePath();
+                $uploadedFileUrl = cloudinary()->upload($request->file('photo')->getRealPath(), ['folder' => 'penyewaan','transformation' => [
+                    'width' => 300, 
+                    'height' => 200, 
+                    'crop' => 'fill' 
+                ]])->getSecurePath();
                 $user->update(
                     [
                         'photo_profile' => $uploadedFileUrl,
@@ -62,7 +66,11 @@ class ProfileController extends Controller
             return redirect('/login');
         } elseif ($request->validemail != true && Hash::check($request->password, $user->password)) {
             if ($request->file('photo') != null) {
-                $uploadedFileUrl = cloudinary()->upload($request->file('photo')->getRealPath(), ['folder' => 'penyewaan',])->getSecurePath();
+                $uploadedFileUrl = cloudinary()->upload($request->file('photo')->getRealPath(), ['folder' => 'penyewaan','transformation' => [
+                    'width' => 300, 
+                    'height' => 200, 
+                    'crop' => 'fill' 
+                ]])->getSecurePath();
                 $user->update(
                     [
                         'photo_profile' => $uploadedFileUrl,

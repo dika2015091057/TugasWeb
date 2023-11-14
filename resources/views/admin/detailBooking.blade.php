@@ -92,10 +92,10 @@
                                                 <li><hr class="dropdown-divider"></li>
                                                 <form action="{{ route('updatedetailstatus') }}" method="POST" class="d-flex">
                                                     @csrf
-                                                    <input type="hidden" name="status" value="Batal">
+                                                    <input type="hidden" name="status" value="belum dibayar">
                                                     <input type="hidden" name="booking_id" value="{{ $id }}">
                                                     <input type="hidden" name="detail_booking_id" value="{{ $detail->detail_booking_id }}">
-                                                    <button class="dropdown-item btn btn-primary" type="submit">Batal</button>
+                                                    <button class="dropdown-item btn btn-primary" type="submit">Belum Dibayar</button>
                                                 </form>
                                             </ul>
                                         </div>

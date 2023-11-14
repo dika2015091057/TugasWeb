@@ -64,12 +64,12 @@
             <div class="card-header bg-primary text-bg-primary">
                 <h2> Booking</h2>
             </div>
-            <table class="table">
+            <table class="table text-center">
                 <thead>
                     <tr>
                         <th scope="col">No</th>
-                        <th scope="col">Nama</th>
-                        <th scope="col">Total</th>
+                        <th scope="col">Nama Pemesan</th>
+                        <th scope="col">Total Harga Booking</th>
                         <th scope="col">Status</th>
                         <th class="text-center" scope="col">Aksi</th>
                     </tr>
@@ -84,8 +84,8 @@
                             <td>{{ $booking->user->name }}</td>
                             <td>{{ number_format($booking->price_total_booking, '0', ',', '.') }}</td>
                             <td>{{ $booking->status }}</td>
-                            <td class="text-center">
-                                <div class="container">
+                            <td class="text-center ">
+                                <div class="container d-flex flex-row gap-2 justify-content-center">
                                     <form action="{{ route('viewDetailBooking', ['booking_id' => $booking->booking_id]) }}"
                                         method="GET">
                                         @csrf

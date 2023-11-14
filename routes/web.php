@@ -67,6 +67,12 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::post('/deletedetailbooking', [AdminBookingController::class,'deleteDetailBooking'])->name('deletedetailbooking');
     Route::get('/vehicle', [VehicleController::class, 'view'])->name('viewVehicle');
     Route::get('/addvehicle', [VehicleController::class, 'create'])->name('createvehicle');
+    Route::post('/newvehicle', [VehicleController::class, 'createVehicle'])->name('newvehicle');
+   
+    Route::get('/viewdetailvehicle{vehicle_id}', [VehicleController::class, 'viewDetailVehicle'])->name('admindetailvehicle');
+    Route::get('/viewupdatevehicle{vehicle_id}', [VehicleController::class, 'viewUpdateVehicle'])->name('viewadminupdatevehicle');
+    Route::post('/updatevehicle', [VehicleController::class, 'updateVehicle'])->name('adminupdatevehicle');
+   
     Route::post('/deletevehicle', [VehicleController::class, 'delete'])->name('deletevehicle');
     Route::get('/adminprofile', [AdminProfileController::class, 'view'])->name('viewProfile');
     Route::post('/adminprofileupdate', [AdminProfileController::class, 'update'])->name('updateAdmin');
