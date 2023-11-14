@@ -10,6 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="admin\style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
 
 
@@ -50,27 +52,27 @@
                 <img src="img/jeep.png" alt="" class="img-fluid rounded-circle  " width="100px" height="100px">
             </a>
         </div>
-        <div class="sidebar d-flex flex-column p-3 me-5 justify-content-center align-items-center" style="width:280px;">
+        <div class="sidebar d-flex flex-column p-3 me-5 justify-content-center align-items-center" style="width:300px;">
             <ul class="nav nav-pills d-flex flex-column mb-auto gap-5  justify-content-center"
                 style="height: 60%;width:80%;">
                 <li class="nav-item text-start ps-1">
                     <a href="/" class="nav-link text-black-50 border @yield('dashboard') ">
-                        Dashboard
+                        <i class="fa-solid fa-house"></i> Dashboard
                     </a>
                 </li>
                 <li class="nav-item text-start ps-1">
                     <a href="/booking" class="nav-link text-black-50 border  @yield('booking')">
-                        Manage Booking
+                        <i class="fa-solid fa-briefcase"></i> Manage Booking
                     </a>
                 </li>
                 <li class="nav-item text-start ps-1">
                     <a href="/vehicle" class="nav-link text-black-50 border  @yield('vehicle')">
-                        Manage Kendaraan
+                        <i class="fa-solid fa-warehouse"></i> Manage Kendaraan
                     </a>
                 </li>
                 <li class="nav-item text-start ps-1">
                     <a href="/adminprofile" class="nav-link text-black-50 border  @yield('profile')">
-                        Profile
+                        <i class="fa-solid fa-user"></i> Profile
                     </a>
                 </li>
             </ul>

@@ -58,11 +58,18 @@ Route::group(['middleware'=>'auth:user'],function (){
 
 // ROUTE FOR ADMIN
 Route::middleware(['auth:admin'])->group(function () {
-    Route::get('/dashboardAdmin', [DashboardAdminController::class, 'showdashboard'])->name('showDashboardAdmin');
     Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/dashboardAdmin', [DashboardAdminController::class, 'showdashboard'])->name('showDashboardAdmin');
     Route::get('/booking', [AdminBookingController::class, 'view'])->name('viewBooking');
+    Route::post('/admindeletebooking', [AdminBookingController::class, 'delete'])->name('admindeleteboking');
+    Route::get('/admindetail{booking_id}', [AdminBookingController::class, 'detailView'])->name('viewDetailBooking');
+    Route::post('/updatedetailstatus', [AdminBookingController::class,'updateStatus'])->name('updatedetailstatus');
+    Route::post('/deletedetailbooking', [AdminBookingController::class,'deleteDetailBooking'])->name('deletedetailbooking');
     Route::get('/vehicle', [VehicleController::class, 'view'])->name('viewVehicle');
+    Route::get('/addvehicle', [VehicleController::class, 'create'])->name('createvehicle');
+    Route::post('/deletevehicle', [VehicleController::class, 'delete'])->name('deletevehicle');
     Route::get('/adminprofile', [AdminProfileController::class, 'view'])->name('viewProfile');
     Route::post('/adminprofileupdate', [AdminProfileController::class, 'update'])->name('updateAdmin');
+
 });
 

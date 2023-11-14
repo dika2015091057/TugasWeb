@@ -12,19 +12,22 @@
                         class="text-decoration-none text-gray-900">Manage Booking</a></p>
             </div>
             <div class="container d-flex flex-wrap justify-content-between gap-3" style="height: 200px">
-                <div class="card mb-3 flex-grow-1 borde-0 shadow"> <!-- Menggunakan flex-grow untuk memungkinkan penyesuaian otomatis -->
+                <div class="card mb-3 flex-grow-1 borde-0 shadow">
+                    <!-- Menggunakan flex-grow untuk memungkinkan penyesuaian otomatis -->
                     <header class="card-header ">Stok Kendaraan</header>
                     <div class="card-body">
                         <p class="card-text">{{ $sum }}</p>
                     </div>
                 </div>
-                <div class="card mb-3 flex-grow-1 borde-0 shadow"> <!-- Menggunakan flex-grow untuk memungkinkan penyesuaian otomatis -->
+                <div class="card mb-3 flex-grow-1 borde-0 shadow">
+                    <!-- Menggunakan flex-grow untuk memungkinkan penyesuaian otomatis -->
                     <header class="card-header ">Stok Kendaraan</header>
                     <div class="card-body">
                         <p class="card-text">{{ $sum }}</p>
                     </div>
                 </div>
-                <div class="card mb-3 flex-grow-1 borde-0 shadow"> <!-- Menggunakan flex-grow untuk memungkinkan penyesuaian otomatis -->
+                <div class="card mb-3 flex-grow-1 borde-0 shadow">
+                    <!-- Menggunakan flex-grow untuk memungkinkan penyesuaian otomatis -->
                     <header class="card-header ">Stok Kendaraan</header>
                     <div class="card-body">
                         <p class="card-text">{{ $sum }}</p>
@@ -68,6 +71,7 @@
                         <th scope="col">Nama</th>
                         <th scope="col">Total</th>
                         <th scope="col">Status</th>
+                        <th class="text-center" scope="col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -78,8 +82,29 @@
                         <tr>
                             <th scope="row">{{ $rowNumber++ }}</th>
                             <td>{{ $booking->user->name }}</td>
-                            <td>{{ $booking->price_total_booking }}</td>
+                            <td>{{ number_format($booking->price_total_booking, '0', ',', '.') }}</td>
                             <td>{{ $booking->status }}</td>
+                            <td class="text-center">
+                                <div class="container">
+                                    <form action="{{ route('viewDetailBooking', ['booking_id' => $booking->booking_id]) }}"
+                                        method="GET">
+                                        @csrf
+                                        <input type="hidden" name="booking_id" value="{{ $booking->booking_id }}">
+                                        <button type="submit" class="btn btn-info">
+                                            <i class="fa-solid fa-pen-to-square fa-bounce"></i>
+                                            Detail
+                                        </button>
+                                    </form>
+                                    <form action="admindeletebooking" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="booking_id" value="{{ $booking->booking_id }}">
+                                        <button type="submit" class="btn btn-danger"><i
+                                                class="fa-sharp fa-solid fa-trash-can "></i>
+                                            Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+
                         </tr>
                     @endforeach
                 </tbody>

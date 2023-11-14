@@ -16,6 +16,6 @@ class Role extends Model
         'updated_at',
     ];
     public function admin(){
-        return $this->hasMany(Admin::class, 'role_id');
+        return $this->hasMany(Admin::class, 'role_id')->withTrashed();
     }
 }

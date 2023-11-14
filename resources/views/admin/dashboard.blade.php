@@ -65,7 +65,9 @@
             </table>
             <div class="text-end mt-3"> <!-- Atur posisi sesuai kebutuhan -->
                 <a class="text-bg-info text-decoration-none" href="/booking">
-                    <h5>Selengkapnya</h5>
+                    <button class="btn btn-info">
+                        Selengkapnya <i class="fa-solid fa-right-to-bracket"></i>
+                    </button>
                 </a>
             </div>
         </div>
@@ -103,7 +105,9 @@
             </table>
             <div class="text-end mt-3"> <!-- Atur posisi sesuai kebutuhan -->
                 <a class="text-bg-info text-decoration-none" href="/vehicle">
-                    <h5>Selengkapnya</h5>
+                    <button class="btn btn-info">
+                        Selengkapnya <i class="fa-solid fa-right-to-bracket"></i>
+                    </button>
                 </a>
             </div>
         </div>

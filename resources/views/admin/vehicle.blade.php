@@ -60,10 +60,16 @@
         </div>
 
         <div class="card row d-flex shadow  px-0 pb-5" style="background-color: #F5F5F5; ">
-            <div class="card-header bg-primary text-bg-primary">
+            <div class="card-header bg-primary text-bg-primary d-flex justify-content-between">
                 <h2> Kendaraan</h2>
+                <form action="{{ route('createvehicle') }}" method="GET">
+                    @csrf
+                    <button type="submit" class="btn btn-info">
+                        <i class="fas fa-add"></i> Tambahkan
+                    </button>
+                </form>
             </div>
-            <table class="table">
+            <table class="table text-center">
                 <thead>
                     <tr>
                         <th scope="col">No</th>
@@ -72,6 +78,7 @@
                         <th scope="col">Stok</th>
                         <th scope="col">Harga Sewa</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -83,9 +90,27 @@
                             <th scope="row">{{ $rowNumber++ }}</th>
                             <td>{{ $vehicle->name}}</td>
                             <td>{{ $vehicle->type }}</td>
-                            <td>{{ $vehicle->stock }}</td>
-                            <td>{{ $vehicle->charter_price }}</td>
+                            <td>{{ $vehicle->stock }} Unit</td>
+                            <td>{{  number_format($vehicle->charter_price, 0, ',', '.') }}/Hari</td>
                             <td>{{ $vehicle->status }}</td>
+                            <td>
+                                <div class="container d-flex flex-row gap-2 justify-content-center">
+                                    <form action="" method="GET">
+                                        @csrf
+                                        <input type="hidden" name="booking_id" value="{{ $vehicle->vehicle_id }}">
+                                        <button type="submit" class="btn btn-info">
+                                            <i class="fa-solid fa-pen-to-square fa-bounce"></i>
+                                            Detail</button>
+                                    </form>
+                                    <form action="{{ route('deletevehicle') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="vehicle_id" value="{{ $vehicle->vehicle_id }}">
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fa-sharp fa-solid fa-trash-can "></i>
+                                            Delete</button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
