@@ -124,6 +124,7 @@
                         </div>
                     @endforeach
                 </div>
+                <div class="swiper-pagination"></div>
             </div>
         </div>
 
@@ -209,8 +210,13 @@
             slidesPerView: '4', // Jumlah slide yang ditampilkan
             spaceBetween: 30, // Spasi antar slide
             direction: 'horizontal', // Atur arah swiper menjadi horizontal
-            loop: true, // Untuk membuat efek loop
+            loop: false, // Untuk membuat efek loop
             allowTouchMove: true,
+            pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+            
 
 
         });
