@@ -1,0 +1,255 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+body{
+    padding-top:50px;
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-padding-top: 2rem;
+    scroll-behavior: smooth;
+    list-style: none;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+}
+
+:root {
+    --main-color: #fe5b3d;
+    --second-color: #ffac38;
+    --text-color: #444;
+    --gradinet: linear-gradinet(#fe5b3d, #ffac38);
+}
+
+html::-webkit-scrollbar{
+    width: 0.5rem;
+}
+
+html::-webkit-scrollbar-track{
+    background: transparent;
+}
+
+html::-webkit-scrollbar-thumb{
+    background: var(--main-color);
+    border-radius: 5rem;
+}
+
+section{
+    display: flex;
+    flex-direction: column;
+    padding: 50px 100px;
+}
+
+header{
+    position: fixed;
+    width: 100%;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    padding: 15px 100px;
+    border-bottom: 1px solid black;
+}
+
+.logo img{
+    width: 40px;
+}
+
+.navbar{
+    display: flex;
+}
+
+.navbar li{
+    position: relative;
+}
+
+.navbar a{
+    font-size: 1rem;
+    padding: 10px 20px;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.navbar a::after {
+    content: "";
+    width: 0;
+    height: 3px;
+    background: #fe5b3d;
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    transition: 0.5s;
+}
+
+.navbar a:hover::after{
+    width: 100%;
+}
+
+#menu-icon{
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 10001;
+    display: none;
+}
+
+.header-btn a{
+    padding: 10px 20px;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.header-btn .Login{
+    background: #474fa0;
+    color: #fff;
+    border-radius: 0.5rem;
+}
+
+.header-btn .Login:hover{
+    background: var(--main-color);
+}
+
+.Overview{
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+    background: url(img/Car\ Website\ –\ 1@2x.png);
+    background-repeat: no-repeat;
+    background-position: center right;
+    background-size: cover;
+    display: grid;
+    align-items: center;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.text h1{
+    font-size: 100 rem;
+    letter-spacing: 2px;
+}
+
+.text span{
+    color: var(--main-color);
+}
+
+.text p{
+    margin: 0.5rem 0 1 rem;
+}
+
+.app-stores{
+    display: flex;
+}
+
+.app-stores img{
+    width: 100px;
+    margin-right: 1rem;
+    cursor: pointer;
+}
+
+.heading{
+    text-align: center;
+    font-size: 3rem;
+}
+
+
+
+.Layanan-container{
+    display: grid;
+    align-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(250px, auto));
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.Layanan-container .box {
+    text-align: center;
+    padding: 20px;
+}
+
+.Layanan-container .box .bx{
+    font-size: 50px;
+    padding: 10px;
+    background: #eeeff1;
+    border-radius: 0.5rem;
+    color: var(--main-color);
+}
+
+.TimKami-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, auto));
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.rev-img{
+    width: 70px;
+    height: 70px;
+}
+
+.rev-img img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    border: 2px solid var(--second-color);
+}
+
+.TimKami-container .box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    box-shadow: 1px 4px 41px rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+}
+
+.HubungiKami .box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: right;
+    padding: 20px;
+    box-shadow: 1px 4px 41px rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+}
+
+.logo-img{
+    width: 200px;
+    height: 200px;
+}
+
+.logo-img img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: left;
+    border: 2px solid var(--second-color);
+}
+
+.HubungiKami-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, auto));
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.copyright{
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center
+}
+
+.copyright{
+    background: #dce7ff;
+}
+
+
+.social a{
+    color: #444;
+    padding: 10px;
+    font-size: 25px;
+}

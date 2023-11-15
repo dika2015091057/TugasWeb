@@ -12,14 +12,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('user_id');
             $table->string('name');
+            $table->string('nik')->nullable();
+            $table->string('username')->unique();
+            $table->string('photo_profile')->nullable()->default("https://www.kindpng.com/picc/m/381-3812277_ville-de-saint-etienne-png-download-gambar-icon.png");
+            $table->text('address')->nullable();
+            $table->string('phone_number');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+           // $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->rememberToken();
+           // $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
+
+        
     }
 
     /**
