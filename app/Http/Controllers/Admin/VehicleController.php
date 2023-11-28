@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class VehicleController extends Controller
 {
@@ -18,6 +19,10 @@ class VehicleController extends Controller
         $admin_id = Auth::user()->admin_id;
         $sum = Vehicle::where('admin_id', $admin_id)->sum('stock');
         $vehicles = Vehicle::where('admin_id', $admin_id)->paginate(5);
+        if ($vehicles->isEmpty()) {
+            Alert::info('Info Detail Booking', 'Kendaraan Masih Kosong');
+            return view('admin.vehicle', compact('vehicles', 'sum'));
+        }
         return view('admin.vehicle', compact('vehicles', 'sum'));
     }
     //TODO View Form CREATE VEHICLE
@@ -48,6 +53,8 @@ class VehicleController extends Controller
             $vehicle->vehicle_photo = $uploadedFileUrl;
             $vehicle->created_at = now();
             $vehicle->save();
+            
+            Alert::success('Kendaraan', 'Kendaraan Baru berhasil di buat');
 
             return redirect(route('createvehicle'));
         } else {
@@ -62,6 +69,8 @@ class VehicleController extends Controller
 
         if ($vehicle) {
             $vehicle->delete();
+            Alert::success('Kendaraan', 'Kendaraan berhasil dihapus');
+
             return redirect(route('viewVehicle'));
         } else {
             return redirect(route('viewVehicle'));
@@ -112,6 +121,7 @@ class VehicleController extends Controller
                         'updated_at' => now(),
                     ]
                 );
+                Alert::success('Kendaraan Berhasil diupdate', 'semoga semakin cuan');
                 return redirect(route('admindetailvehicle', ['vehicle_id' => $vehicleid]));
             } else {
                 $vehicle->update(
@@ -125,9 +135,11 @@ class VehicleController extends Controller
                         'updated_at' => now(),
                     ]
                 );
+                Alert::success('Kendaraan Berhasil diupdate', 'semoga semakin cuan');
                 return redirect(route('admindetailvehicle', ['vehicle_id' => $vehicleid]));
             }
         }
+        Alert::error('Kendaraan Gagal diupdate', 'silakan cek password yang di masukkan');
 
         return redirect(route('admindetailvehicle', ['vehicle_id' => $vehicleid]));
     }
