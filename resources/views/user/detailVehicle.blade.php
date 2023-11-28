@@ -198,8 +198,8 @@
         updateTotal();
 
         // Panggil fungsi Sewa() setiap kali tanggal diubah
-        document.getElementById("pengambilan").addEventListener("change", Sewa);
-        document.getElementById("pengembalian").addEventListener("change", Sewa);
+        document.getElementById("pengambilan").addEventListener("change", sewa);
+        document.getElementById("pengembalian").addEventListener("change", sewa);
 
         // Panggil updateTotal() untuk menginisialisasi total awal
         updateTotal();
