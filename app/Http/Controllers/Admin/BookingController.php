@@ -36,6 +36,8 @@ class BookingController extends Controller
         }else{
             $booking=Booking::find($booking_id);
             $booking->delete();
+
+
             return redirect(route('viewBooking'));
         }
         
@@ -83,6 +85,15 @@ class BookingController extends Controller
         $detail = DetailBooking::find($request->detail_booking_id);
         if ($detail) {
             $detail->delete();
+            $vehicle= Vehicle::where('vehicle_id',$detail->vehicle_id)->first;
+            $stok=$vehicle->stock + $detail->qty;
+            $vehicle->update(['stock'=>$stok]);
+
+            $booking=Booking::find($detail->booking_id);
+            $total=$booking->price_total_booking - $detail->price_total_charter;
+            $booking->update(['price_total_booking'=>$total]);
+
+
             return redirect()->route('viewDetailBooking', $request->booking_id);
         }
         return redirect()->route('viewDetailBooking', $request->booking_id);
