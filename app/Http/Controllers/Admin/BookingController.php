@@ -85,7 +85,7 @@ class BookingController extends Controller
         $detail = DetailBooking::find($request->detail_booking_id);
         if ($detail) {
             $detail->delete();
-            $vehicle= Vehicle::where('vehicle_id',$detail->vehicle_id)->first;
+            $vehicle= Vehicle::where('vehicle_id',$detail->vehicle_id)->first();
             $stok=$vehicle->stock + $detail->qty;
             $vehicle->update(['stock'=>$stok]);
 
