@@ -143,7 +143,7 @@
             }
         }
 
-        function Sewa() {
+        function sewa() {
             var datePengambilan = document.getElementById("pengambilan").value;
             var datePengembalian = document.getElementById("pengembalian").value;
 
