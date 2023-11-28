@@ -16,6 +16,8 @@
 
 
 <body>
+    @include('sweetalert::alert')
+
     <div class="grid-container">
         <section class="header">
             <div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 3fr 1fr;">

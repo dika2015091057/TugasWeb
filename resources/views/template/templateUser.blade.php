@@ -21,6 +21,8 @@
 </head>
 
 <body>
+    @include('sweetalert::alert')
+
     {{-- sesion header --}}
         <header class="py-3 mb-3 border-bottom fixed-top bg-white">
             <div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 2fr 6fr 1fr 1fr;">
