@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ProfileController extends Controller
 {
@@ -44,7 +45,9 @@ class ProfileController extends Controller
 
                 );
                 // Redirect after successful update
+                
                 Auth::logout();
+                Alert::success('Profile dan Email Berhasil diupdate', 'silakan login ualng');
                 return redirect('/login');
             }
             $admin->update(
@@ -81,6 +84,7 @@ class ProfileController extends Controller
 
                 );
                 // Redirect after successful update
+                Alert::success('Profile Berhasil diupdate', 'selamat');
                 return redirect()->route('viewProfile')->with('success', 'Profile updated successfully!');
             }
             $admin->update(
@@ -93,11 +97,12 @@ class ProfileController extends Controller
                 ]
             );
             // Redirect after successful update
-
+            Alert::success('Profile Berhasil diupdate', 'selamat');
             return redirect()->route('viewProfile')->with('success', 'Profile updated successfully!');
         }
 
         // Redirect back if passwords do not match
-        return redirect()->route('viewProfile')->with('error', 'Password incorrect. Profile update failed.');
+        Alert::error('Profile Gagal diupdate', 'silakan cek password yang di masukkan');
+        return redirect()->route('viewProfile');
     }
 }

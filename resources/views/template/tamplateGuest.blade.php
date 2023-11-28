@@ -9,6 +9,8 @@
     @yield('title')
 </head>
 <body>
+    @include('sweetalert::alert')
+
     {{-- <section class="header" >
         <div class="navbar d-flex justify-content-lg-between  ">
 

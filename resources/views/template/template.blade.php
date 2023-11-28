@@ -46,6 +46,8 @@
 </head>
 
 <body>
+    @include('sweetalert::alert')
+
     <section class="head fixed-top">
         <div
             class="container-fluid row col-12 py-2 mx-0 d-flex justify-content-between align-items-center bg-body-secondary">
