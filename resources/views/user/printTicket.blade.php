@@ -36,7 +36,7 @@
                         </tr>
                         <tr>
                             <th scope="row">Nama Kendaraan</th>
-                            <td>: RX King Terkencang</td>
+                            <td>: {{ $tickets->vehicle->name }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Jumlah Kendaraan</th>
