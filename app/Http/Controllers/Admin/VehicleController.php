@@ -14,16 +14,20 @@ class VehicleController extends Controller
 {
 
     //TODO VIEW VEHICLE
-    public function view()
+    public function view(request $request)
     {
+        $search=$request->input('search');
         $admin_id = Auth::user()->admin_id;
         $sum = Vehicle::where('admin_id', $admin_id)->sum('stock');
-        $vehicles = Vehicle::where('admin_id', $admin_id)->paginate(5);
+        $vehicles= $vehicles = Vehicle::where('admin_id', $admin_id)->sortable()->paginate(5);;
+        if(!empty($search)){
+            $vehicles=Vehicle::where([['admin_id','=',$admin_id],['name','like','%'.$search.'%']])->sortable()->paginate(5);
+        }
         if ($vehicles->isEmpty()) {
             Alert::info('Info Detail Booking', 'Kendaraan Masih Kosong');
-            return view('admin.vehicle', compact('vehicles', 'sum'));
+            return view('admin.vehicle', compact('vehicles', 'sum', 'search'));
         }
-        return view('admin.vehicle', compact('vehicles', 'sum'));
+        return view('admin.vehicle', compact('vehicles', 'sum', 'search'));
     }
     //TODO View Form CREATE VEHICLE
     public function create()
