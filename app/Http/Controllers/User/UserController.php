@@ -66,6 +66,7 @@ class UserController extends Controller
 
         $ticket = DetailBooking::with('Vehicle')
             ->where('booking_id', $id)
+            ->orderBy('created_at','desc')
             ->get();
 
         $vehicle = DetailBooking::with('Vehicle')

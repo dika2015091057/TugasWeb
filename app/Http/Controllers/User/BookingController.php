@@ -148,7 +148,8 @@ class BookingController extends Controller
             ->leftJoin('vehicles', 'detail_bookings.vehicle_id', '=', 'vehicles.vehicle_id')
             ->leftJoin('admins', 'vehicles.admin_id', '=', 'admins.admin_id')
             ->where('bookings.user_id', $userId)
-            ->groupBy('bookings.booking_id', 'bookings.price_total_booking', 'bookings.status')
+            ->groupBy('bookings.booking_id', 'bookings.price_total_booking', 'bookings.status',)
+            ->orderBy('bookings.created_at','desc')
             ->get();
 
         // foreach ($booking as $bookings) {
