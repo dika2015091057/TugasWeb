@@ -14,22 +14,33 @@ use RealRashid\SweetAlert\Facades\Alert;
 class BookingController extends Controller
 {
     //TODO View Bookings
-    public function view()
+    public function view(request $request)
     {
+        $search = $request->input('search');
         $admin_id = Auth::user()->admin_id;
 
         $sum = Vehicle::where('admin_id', $admin_id)->sum('stock');
-        
-        $bookings = Booking::whereHas('detail.vehicle', function ($query) use ($admin_id) {
+
+        $booking = Booking::whereHas('detail.vehicle', function ($query) use ($admin_id) {
             $query->where('admin_id', $admin_id);
-        })->with('detail', 'user')->paginate(5);
+        })->with('detail', 'user');
+
+        if (!empty($search)) {
+            $booking->where(function ($query) use ($search) {
+                $query->where('price_total_booking', 'like', '%' . $search . '%')
+                    ->orWhereHas('user', function ($subQuery) use ($search) {
+                        $subQuery->where('name', 'like', '%' . $search . '%');
+                    });
+            });
+        }
+
+        $bookings = $booking->sortable()->paginate(5);
 
         if ($bookings->isEmpty()) {
             Alert::info('Info', 'Booking Kosong');
-            return view('admin.booking', compact('bookings', 'sum'));
+            return view('admin.booking', compact('bookings', 'sum', 'search'));
         }
-        
-        return view('admin.booking', compact('bookings', 'sum'));
+        return view('admin.booking', compact('bookings', 'sum', 'search'));
     }
 
     //TODO Delete Booking
@@ -76,7 +87,6 @@ class BookingController extends Controller
             $details = DetailBooking::where('booking_id', $id)->with('booking.user', 'vehicle')->paginate(5);
             return view('admin.detailBooking', compact('details', 'id'));
         }
-        
     }
 
     //TODO Update Status Detail Booking
@@ -101,7 +111,7 @@ class BookingController extends Controller
         if ($detail) {
             $detail->delete();
             $vehicle = Vehicle::where('vehicle_id', $detail->vehicle_id)->first();
-            $stok = $vehicle->stock + $detail->qty;       
+            $stok = $vehicle->stock + $detail->qty;
             $vehicle->update(['stock' => $stok]);
 
             $booking = Booking::find($detail->booking_id);

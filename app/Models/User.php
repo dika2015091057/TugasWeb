@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Booking;
 use Laravel\Sanctum\HasApiTokens;
+use Kyslik\ColumnSortable\Sortable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,9 +21,9 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     use SoftDeletes;
-
+    use Sortable;
     protected $dates = ['deleted_at'];
-    protected $primaryKey ='user_id';
+    protected $primaryKey = 'user_id';
     protected $fillable = [
         'name',
         'username',
@@ -54,7 +55,12 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function booking(){
-        return $this->hasMany(Booking::class,'user_id')->withTrashed();
+    public function booking()
+    {
+        return $this->hasMany(Booking::class, 'user_id')->withTrashed();
     }
+    public $sortable = [
+        'name',
+        'username',
+    ];
 }
