@@ -16,28 +16,7 @@
             </div>
 
             {{-- Section Search --}}
-            <div class="d-flex align-items-center justify-content-start">
-                <form class=" w-50  me-3 bg-transparent " role="search" action="{{ route('search') }}">
-                    <input type="search" class="form-control bg-transparent  rounded-pill py-3 shadow " placeholder="Search..."
-                        aria-label="Search" name="search">
-                </form>
-
-                <form action="">
-                    <select id="sortingSelect" class="form-select form-select-lg" aria-label="Large select example">
-                        <option value="name">Nama</option>
-                        <option value="total">Total</option>
-                        <option value="status">Status</option>
-                    </select>
-                </form>
-
-                <form id="orderSelect">
-                    <select id="orderOption" class="form-select form-select-lg" aria-label="Large select example">
-                        <option value="asc">Naik</option>
-                        <option value="desc">Turun</option>
-                    </select>
-                </form>
-
-            </div>
+          
 
             <div class="card row d-flex shadow  px-0 pb-5" style="background-color: #F5F5F5; ">
                 <div class="card-header bg-primary text-bg-primary">
@@ -48,20 +27,20 @@
                         <tr>
                             <th scope="col">No</th>
                             <th scope="col">Nama Pemesan</th>
-                            <th scope="col">Nama Kendaraan</th>
-                            <th scope="col">Sewa</th>
-                            <th scope="col">Qty</th>
-                            <th scope="col">Pengambilan</th>
-                            <th scope="col">Pengembalian</th>
-                            <th scope="col">Waktu</th>
-                            <th scope="col">Total</th>
-                            <th scope="col">Status</th>
+                            <th scope="col">@sortablelink('vehicle.name', 'Nama Kendaraan')</th>
+                            <th scope="col">@sortablelink('vehicle.charter_price', 'Sewa')</th>
+                            <th scope="col">@sortablelink('qty', 'Qty')</th>
+                            <th scope="col">@sortablelink('pickup_date', 'Pengambilan')</th>
+                            <th scope="col">@sortablelink('return_date', 'Pengembalian')</th>
+                            <th scope="col">@sortablelink('day', 'Waktu')</th>
+                            <th scope="col">@sortablelink('price_total_charter', 'Total')</th>
+                            <th scope="col">@sortablelink('status', 'Status')</th>
                             <th class="text-center" scope="col">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="text-center">
                         @php
-                            $rowNumber = 1; // Inisialisasi nomor baris
+                            $rowNumber = 1 + ($details->currentPage() - 1) * $details->perpage(); // Inisialisasi nomor baris
                         @endphp
                         @foreach ($details as $detail)
                             <tr class="">
@@ -113,53 +92,9 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $details->appends(['booking_id' => $id])->links('pagination::bootstrap-5') }}
+                {{-- {{ $details->appends(['booking_id' => $id])->links('pagination::bootstrap-5') }} --}}
+                {!! $details->appends(Request::except('page'))->render('pagination::bootstrap-5') !!}
             </div>
         </section>
-
-        <script>
-            let orderDirection = 'asc'; // Inisialisasi urutan naik
-            let tableBody = document.querySelector('tbody'); // Memindahkan ini ke luar fungsi
-
-            // Inisialisasi rows di luar fungsi
-            let rows = Array.from(tableBody.querySelectorAll('tr'));
-
-            // Fungsi sortRows() yang memanipulasi rows
-            function sortRows() {
-                const selectedValue = document.getElementById('sortingSelect').value;
-                let comparator;
-
-                if (selectedValue === 'name') {
-                    comparator = (a, b) => a.cells[1].textContent.localeCompare(b.cells[1].textContent);
-                } else if (selectedValue === 'total') {
-                    comparator = (a, b) => parseFloat(a.cells[2].textContent) - parseFloat(b.cells[2].textContent);
-                } else if (selectedValue === 'status') {
-                    comparator = (a, b) => a.cells[3].textContent.localeCompare(b.cells[3].textContent);
-                }
-
-                // Lakukan pengurutan berdasarkan comparator dan arah urutan
-                rows.sort((a, b) => {
-                    const comparisonResult = comparator(a, b);
-                    return orderDirection === 'asc' ? comparisonResult : -comparisonResult;
-                });
-
-                // Hapus baris yang ada dari tabel
-                tableBody.innerHTML = '';
-
-                // Tambahkan baris yang sudah diurutkan ke tabel
-                rows.forEach(row => tableBody.appendChild(row));
-            }
-
-            // Tambahkan event listener untuk select pertama
-            document.getElementById('sortingSelect').addEventListener('change', function() {
-                sortRows();
-            });
-
-            // Event listener untuk select kedua
-            document.getElementById('orderOption').addEventListener('change', function() {
-                orderDirection = this.value;
-                sortRows();
-            });
-        </script>
 
     @endsection
