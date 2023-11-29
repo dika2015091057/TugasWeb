@@ -70,7 +70,7 @@ class BookingController extends Controller
             ->where('status', '!=', 'lunas') // Filter status bukan "lunas"
             ->first();
         if ($check->isEmpty()) {
-            $details = DetailBooking::where('booking_id', $id)->with('booking.user', 'vehicle')->paginate(5);
+            $details = DetailBooking::where('booking_id', $id)->with('booking.user', 'vehicle')->sortable()->paginate(5);
             Alert::info('Info Detail Booking', 'Detail Booking Kosong');
             return view('admin.detailBooking', compact('details', 'id'));
         }
@@ -78,13 +78,13 @@ class BookingController extends Controller
             $update = Booking::where('booking_id', $id)->first();
             $update->status = 'Proses';
             $update->save();
-            $details = DetailBooking::where('booking_id', $id)->with('booking.user', 'vehicle')->paginate(5);
+            $details = DetailBooking::where('booking_id', $id)->with('booking.user', 'vehicle')->sortable()->paginate(5);
             return view('admin.detailBooking', compact('details', 'id'));
         } else {
             $update = Booking::where('booking_id', $id)->first();
             $update->status = 'Selesai';
             $update->save();
-            $details = DetailBooking::where('booking_id', $id)->with('booking.user', 'vehicle')->paginate(5);
+            $details = DetailBooking::where('booking_id', $id)->with('booking.user', 'vehicle')->sortable()->paginate(5);
             return view('admin.detailBooking', compact('details', 'id'));
         }
     }
@@ -109,16 +109,21 @@ class BookingController extends Controller
     {
         $detail = DetailBooking::find($request->detail_booking_id);
         if ($detail) {
-            $detail->delete();
+            
             $vehicle = Vehicle::where('vehicle_id', $detail->vehicle_id)->first();
-            $stok = $vehicle->stock + $detail->qty;
-            $vehicle->update(['stock' => $stok]);
+            if ($vehicle) {
+                $stok = $vehicle->stock + $detail->qty;
+                $vehicle->update(['stock' => $stok]);
+            } else {
+                // Handle the case when the vehicle is not found
+                // You might want to log an error, display a message, or take other actions
+            }
 
             $booking = Booking::find($detail->booking_id);
             $total = $booking->price_total_booking - $detail->price_total_charter;
             $total = max(0, $total);
             $booking->update(['price_total_booking' => $total]);
-
+            $detail->delete();
             Alert::success('Detail Booking', 'Data berhasil dihapus');
 
             return redirect()->route('viewDetailBooking', $request->booking_id);
