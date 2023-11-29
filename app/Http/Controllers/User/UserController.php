@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
@@ -22,6 +23,10 @@ class UserController extends Controller
     public function viewvehicles()
     {
         $vehicles = vehicle::paginate(6);
+        if($vehicles->isEmpty()){
+            Alert::info('Info', 'Kendaraan Tidak Ditemukan');
+            return view('user.home', compact('vehicles'));
+        }
         return view('user.home', compact('vehicles'));
     }
 
@@ -42,7 +47,11 @@ class UserController extends Controller
         $search = $request->input('search');
         $vehicles = Vehicle::where('name', 'like', '%' . $search . '%')->orderby('name')
             ->paginate(6);
-
+        if ($vehicles->isEmpty()) {
+            Alert::info('Info', 'Kendaraan Tidak Ditemukan');
+            return view('user.home', compact('vehicles'));
+            
+        }
         return view('user.home', compact('vehicles'));
     }
 
@@ -52,7 +61,10 @@ class UserController extends Controller
         $type = $request->input('type');
         $vehicles = Vehicle::where('type', 'like', $type)
             ->paginate(6);
-
+            if($vehicles->isEmpty()){
+                Alert::info('Info', 'Kendaraan Tidak Ditemukan');
+                return view('user.home', compact('vehicles'));
+            }
         return view('user.home', compact('vehicles'));
     }
 
@@ -77,7 +89,7 @@ class UserController extends Controller
             $admin = Admin::where('admin_id', $vehicle->vehicle->admin_id)->first();
             return view('user.ticket', compact('ticket', 'admin', 'booking'));
         }
-
+        Alert::info('Info', 'Data Booking ini kosong');
         return redirect()->route('bookings', Auth::user()->user_id);
     }
 

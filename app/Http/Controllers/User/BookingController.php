@@ -17,6 +17,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use PHPUnit\Framework\Attributes\Ticket;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class BookingController extends Controller
 {
@@ -84,6 +85,8 @@ class BookingController extends Controller
 
 
                             // Melakukan redirect ke route baru
+                            Alert::success('Booking berhasil', 'ayo booking lagi ya');
+
                             return redirect()->route('ticket', $booking_id);
                         }
                     }
@@ -134,6 +137,7 @@ class BookingController extends Controller
         $ticket = [
             'booking_id' => $newBookingId,
         ];
+        Alert::success('Booking berhasil', 'ayo booking lagi ya');
         return redirect()->route('ticket', $ticket);
         //return response()->json(['message' => 'Booking created', 'booking_id' => $newBookingId], 201);
     }
@@ -149,17 +153,13 @@ class BookingController extends Controller
             ->leftJoin('admins', 'vehicles.admin_id', '=', 'admins.admin_id')
             ->where('bookings.user_id', $userId)
             ->groupBy('bookings.booking_id', 'bookings.price_total_booking', 'bookings.status',)
-            ->orderBy('bookings.created_at','desc')
+            ->orderBy('bookings.created_at', 'desc')
             ->get();
 
-        // foreach ($booking as $bookings) {
-        //     //echo "Booking ID: " . $booking->booking_id . "\n";
-        //     echo "Admin Name: " . $booking->admin_name . "\n";
-        //     // tambahkan informasi lain yang ingin Anda tampilkan
-        //     echo "\n";
-        // }
-
-        //dd($booking);
+        if ($booking->isEmpty()) {
+            Alert::info('Info', 'Booking masih Kosong, ayo booking dulu');
+            return view('user.booking', compact('booking'));
+        }
         return view('user.booking', compact('booking'));
     }
 
@@ -182,9 +182,10 @@ class BookingController extends Controller
             if ($booking) {
                 $booking->delete();
             }
-
+            Alert::success('Booking berhasil dihapus', 'ayo booking lagi dong');
             return redirect()->route('bookings', Auth::user()->user_id);
         } else {
+            Alert::info('Gak Bisa Hapus', 'Masih ada tiket booking yang masih dalam "proses"');
             return redirect()->back()->with('error', 'Tidak dapat menghapus karena ada detail booking dalam status "proses".');
         }
     }
@@ -196,8 +197,6 @@ class BookingController extends Controller
         $vehicle = Vehicle::where('vehicle_id', $detailBookings->vehicle_id)->first();
         $count = $vehicle->stock + $detailBookings->qty;
 
-
-        //$detailBookings->each->delete();
         $ticket = DetailBooking::find($request->input('detail_booking_id'));
 
         if ($ticket) {
@@ -205,11 +204,10 @@ class BookingController extends Controller
 
             $vehicle->stock = $count; // Misalnya, mengurangi qty sebanyak 1
             $vehicle->save();
+            Alert::success('Detail Booking', 'Tiket berhasil dihapus');
         }
-
         $Bookings = DetailBooking::where('booking_id', $request->input('booking_id'))->get();
         if ($Bookings->isNotEmpty()) {
-
             return redirect()->route('ticket', $request->booking_id);
         }
         return redirect()->route('bookings', Auth::user()->user_id);

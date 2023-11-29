@@ -9,6 +9,7 @@ use function Laravel\Prompts\error;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ProfileController extends Controller
 {
@@ -48,6 +49,7 @@ class ProfileController extends Controller
                 // Redirect after successful update
                 Auth::logout();
                 return redirect('/login');
+                Alert::success('Profile dan Email Berhasil diupdate', 'silakan login ualng');
             }
             $user->update(
                 [
@@ -64,6 +66,7 @@ class ProfileController extends Controller
             // Redirect after successful update
             Auth::logout();
             return redirect('/login');
+            Alert::success('Profile dan Email Berhasil diupdate', 'silakan login ualng');
         } elseif ($request->validemail != true && Hash::check($request->password, $user->password)) {
             if ($request->file('photo') != null) {
                 $uploadedFileUrl = cloudinary()->upload($request->file('photo')->getRealPath(), ['folder' => 'penyewaan','transformation' => [
@@ -84,7 +87,7 @@ class ProfileController extends Controller
 
                 );
                 // Redirect after successful update
-
+                Alert::success('Profile Berhasil diupdate', 'selamat');
                 return redirect()->route('view')->with('success', 'Profile updated successfully!');
             }
             $user->update(
@@ -99,11 +102,12 @@ class ProfileController extends Controller
 
             );
             // Redirect after successful update
-
+            Alert::success('Profile Berhasil diupdate', 'selamat');
             return redirect()->route('view')->with('success', 'Profile updated successfully!');
         }
 
         // Redirect back if passwords do not match
+        Alert::error('Profile Gagal diupdate', 'silakan cek password yang di masukkan');
         return redirect()->route('view')->with('error', 'Password incorrect. Profile update failed.');
     }
 }
