@@ -38,25 +38,12 @@
 
         {{-- Section Search --}}
         <div class="d-flex align-items-center justify-content-start">
-            <form class=" w-50  me-3 bg-transparent " role="search" action="{{ route('search') }}">
+            <form class=" w-50  me-3 bg-transparent " role="search" method="GET">
                 <input type="search" class="form-control bg-transparent  rounded-pill py-3 shadow " placeholder="Search..."
-                    aria-label="Search" name="search">
+                    aria-label="Search" name="search" id="search" autofocus="true" value="{{ $search }}">
             </form>
 
-            <form action="">
-                <select id="sortingSelect" class="form-select form-select-lg" aria-label="Large select example">
-                    <option value="name">Nama</option>
-                    <option value="total">Total</option>
-                    <option value="status">Status</option>
-                </select>
-            </form>
 
-            <form id="orderSelect">
-                <select id="orderOption" class="form-select form-select-lg" aria-label="Large select example">
-                    <option value="asc">Naik</option>
-                    <option value="desc">Turun</option>
-                </select>
-            </form>
 
         </div>
 
@@ -68,15 +55,15 @@
                 <thead>
                     <tr>
                         <th scope="col">No</th>
-                        <th scope="col">Nama Pemesan</th>
-                        <th scope="col">Total Harga Booking</th>
-                        <th scope="col">Status</th>
+                        <th scope="col">@sortablelink('user.name', 'Nama Pemesan')</th>
+                        <th scope="col">@sortablelink('price_total_booking', 'Total Harga Booking')</th>
+                        <th scope="col">@sortablelink('status', 'Status')</th>
                         <th class="text-center" scope="col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php
-                        $rowNumber = 1; // Inisialisasi nomor baris
+                        $rowNumber = 1 + ($bookings->currentPage() - 1) * $bookings->perpage(); // Inisialisasi nomor baris
                     @endphp
                     @foreach ($bookings as $booking)
                         <tr>
@@ -109,53 +96,11 @@
                     @endforeach
                 </tbody>
             </table>
-            {{ $bookings->links('pagination::bootstrap-5') }}
+            {{-- {{ $bookings->links('pagination::bootstrap-5') }} --}}
+            {!! $bookings->appends(Request::except('page'))->render('pagination::bootstrap-5') !!}
         </div>
     </section>
 
-    <script>
-        let orderDirection = 'asc'; // Inisialisasi urutan naik
-        let tableBody = document.querySelector('tbody'); // Memindahkan ini ke luar fungsi
 
-        // Inisialisasi rows di luar fungsi
-        let rows = Array.from(tableBody.querySelectorAll('tr'));
-
-        // Fungsi sortRows() yang memanipulasi rows
-        function sortRows() {
-            const selectedValue = document.getElementById('sortingSelect').value;
-            let comparator;
-
-            if (selectedValue === 'name') {
-                comparator = (a, b) => a.cells[1].textContent.localeCompare(b.cells[1].textContent);
-            } else if (selectedValue === 'total') {
-                comparator = (a, b) => parseFloat(a.cells[2].textContent) - parseFloat(b.cells[2].textContent);
-            } else if (selectedValue === 'status') {
-                comparator = (a, b) => a.cells[3].textContent.localeCompare(b.cells[3].textContent);
-            }
-
-            // Lakukan pengurutan berdasarkan comparator dan arah urutan
-            rows.sort((a, b) => {
-                const comparisonResult = comparator(a, b);
-                return orderDirection === 'asc' ? comparisonResult : -comparisonResult;
-            });
-
-            // Hapus baris yang ada dari tabel
-            tableBody.innerHTML = '';
-
-            // Tambahkan baris yang sudah diurutkan ke tabel
-            rows.forEach(row => tableBody.appendChild(row));
-        }
-
-        // Tambahkan event listener untuk select pertama
-        document.getElementById('sortingSelect').addEventListener('change', function() {
-            sortRows();
-        });
-
-        // Event listener untuk select kedua
-        document.getElementById('orderOption').addEventListener('change', function() {
-            orderDirection = this.value;
-            sortRows();
-        });
-    </script>
 
 @endsection
