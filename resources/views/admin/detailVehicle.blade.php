@@ -78,7 +78,7 @@
                 </div>
                 <div class="col-4 offset-2 d-flex flex-column mt-3">
                     <label for="charter_price">Harga Sewa</label>
-                    <input class="card" type="text" name="charter_price" id="charter_price" value="Rp.{{ number_format($vehicle->charter_price, 0, ',', '.') }}/Hari" readonly>
+                    <input class="card" type="text" name="charter_price" id="charter_price" value="Rp.{{ number_format($vehicleold->charter_price, 0, ',', '.') }}/Hari" readonly>
                 </div>
                 <div class="col-4 offset-1 d-flex flex-column mt-3">
                     <label for="status">Status</label>
